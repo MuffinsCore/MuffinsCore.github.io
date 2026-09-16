@@ -1,1 +1,397 @@
-<h5>123<h5\>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"不是"登录页面</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+        }
+        
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #1a1a1a;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            z-index: 1;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .header img {
+            height: clamp(30px, 8vw, 40px);
+            max-width: 100%;
+            object-fit: contain;
+        }
+        
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: clamp(20px, 5vw, 30px);
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            z-index: 1;
+        }
+        
+        .login-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .lock-icon {
+            width: clamp(20px, 5vw, 24px);
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 8px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: clamp(14px, 3vw, 16px);
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input.error {
+            border-color: #ff4d4f;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .login-button, 
+        .register-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: clamp(14px, 3vw, 16px);
+            margin-bottom: 10px;
+        }
+
+        .login-button {
+            background-color: #00a0e9;
+            color: white;
+            border: none;
+        }
+
+        .register-button {
+            background-color: white;
+            color: #00a0e9;
+            border: 1px solid #00a0e9;
+        }
+
+        .login-button:hover {
+            background-color: #0086c3;
+        }
+
+        .register-button:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+            z-index: 1;
+            font-size: clamp(12px, 2.5vw, 14px);
+            width: 100%;
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .login-container {
+                padding: 15px;
+                width: 95%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .login-button,
+            .register-button {
+                width: 100%;
+            }
+
+            .footer {
+                padding: 10px 0;
+            }
+        }
+
+        @media screen and (max-height: 600px) {
+            .header {
+                margin-bottom: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .footer {
+                padding: 10px 0;
+            }
+        }
+
+        .error-message {
+            color: #ff4d4f;
+            font-size: 12px;
+            margin-top: 4px;
+            min-height: 17px;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="header">
+        <img src="assets/images/china-mobile-logo.png" alt="中国移动">
+    </div>
+    
+    <div class="login-container">
+        <div class="login-header">
+            <img src="assets/images/lock-icon.png" alt="锁" class="lock-icon">
+            <span>登🦌。</span>
+        </div>
+        
+        <form onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label>账号</label>
+                <input type="text" name="account" id="account" placeholder="用户名/手机号/邮箱">
+                <div class="error-message" id="accountError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" name="password" id="password">
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            
+            <button type="submit" class="login-button">登🦌</button>
+            <button type="button" class="register-button" onclick="window.location.href='assets/注册.html'">注册</button>
+        </form>
+    </div>
+    <div class="footer">
+        ©1860洋务运动时期-2025 MCPG 
+    </div>
+
+    <!-- 确保在 body 结束前引入 particles.js -->
+    <script src="assets/js/particles.min.js"></script>
+    
+    <!-- 验证脚本 -->
+    <script>
+        function validateAccount(account) {
+            // 用户名格式：大小写字母、数字、下划线
+            const usernameRegex = /^[a-zA-Z0-9_]+$/;
+            // 手机号格式：11位数字
+            const phoneRegex = /^\d{11}$/;
+            // 邮箱格式
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (usernameRegex.test(account)) {
+                return { type: 'username', value: account };
+            } else if (phoneRegex.test(account)) {
+                return { type: 'phone', value: account };
+            } else if (emailRegex.test(account)) {
+                return { type: 'email', value: account };
+            }
+            return { type: 'invalid', value: account };
+        }
+
+        async function validateForm(event) {
+            event.preventDefault();
+            
+            // 重置错误消息
+            document.getElementById('accountError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('account').classList.remove('error');
+            document.getElementById('password').classList.remove('error');
+            
+            const account = document.getElementById('account').value;
+            const password = document.getElementById('password').value;
+            
+            // 验证账号格式
+            const accountValidation = validateAccount(account);
+            if (accountValidation.type === 'invalid') {
+                document.getElementById('accountError').textContent = '请输入正确的用户名/手机号/邮箱';
+                document.getElementById('account').classList.add('error');
+                return false;
+            }
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        accountType: accountValidation.type,
+                        account: accountValidation.value,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    localStorage.setItem('username', result.username);
+                    window.location.href = "assets/dashboard.html";
+                } else {
+                    if (result.error === 'account_not_found') {
+                        document.getElementById('accountError').textContent = '未找到用户';
+                        document.getElementById('account').classList.add('error');
+                    } else if (result.error === 'invalid_password') {
+                        document.getElementById('passwordError').textContent = '密码错误';
+                        document.getElementById('password').classList.add('error');
+                    }
+                }
+                
+            } catch(error) {
+                console.error('Error:', error);
+                document.getElementById('accountError').textContent = '登录过程出现错误，请稍后重试';
+            }
+            
+            return false;
+        }
+
+        // 添加实时输入验证
+        document.getElementById('account').addEventListener('input', function(e) {
+            const account = e.target.value;
+            const accountValidation = validateAccount(account);
+            
+            if (accountValidation.type === 'invalid' && account !== '') {
+                document.getElementById('accountError').textContent = '请输入正确的用户名/手机号/邮箱';
+                e.target.classList.add('error');
+            } else {
+                document.getElementById('accountError').textContent = '';
+                e.target.classList.remove('error');
+            }
+        });
+    </script>
+
+    <!-- particles.js 配置 -->
+    <script>
+        // 等待文档和 particles.js 都加载完成
+        window.addEventListener('load', function() {
+            if(window.particlesJS) {
+                particlesJS('particles-js', {
+                    "particles": {
+                        "number": {
+                            "value": 80,
+                            "density": {
+                                "enable": true,
+                                "value_area": 800
+                            }
+                        },
+                        "color": {
+                            "value": "#ffffff"
+                        },
+                        "shape": {
+                            "type": "circle"
+                        },
+                        "opacity": {
+                            "value": 0.5,
+                            "random": false
+                        },
+                        "size": {
+                            "value": 3,
+                            "random": true
+                        },
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 150,
+                            "color": "#ffffff",
+                            "opacity": 0.4,
+                            "width": 1
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 4,
+                            "direction": "none",
+                            "random": false,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false
+                        }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": {
+                                "enable": true,
+                                "mode": "grab"
+                            },
+                            "onclick": {
+                                "enable": true,
+                                "mode": "push"
+                            },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": {
+                                "distance": 200,
+                                "line_linked": {
+                                    "opacity": 1
+                                }
+                            },
+                            "push": {
+                                "particles_nb": 4
+                            }
+                        }
+                    },
+                    "retina_detect": true
+                });
+            } else {
+                console.error('particles.js not loaded');
+            }
+        });
+    </script>
+</body>
+</html>
