@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <style>
+        * {box-sizing: border-box; margin: 0; padding: 0;}
+        body {font-family: Arial, sans-serif; background-color: #f0f2f5; padding-top: 100px; min-width: 320px;}
+        .fixed-nav {position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background-color: #fff;}
+        .header {background-color: #fff; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;}
+        .nav-menu {background-color: #1890ff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;}
+        .nav-menu a {color: white; text-decoration: none;}
+        .content {max-width: 800px; margin: 20px auto; padding: 20px; background: white; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);}
+        .article-item {margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;}
+        .article-title {font-size: 18px; font-weight: bold; color: #1890ff; text-decoration: none;}
+        .article-meta {color: #666; font-size: 14px;}
+    </style>
+</head>
+<body>
+    <div class="fixed-nav">
+        <div class="header">
+            <div class="logo">个人中心</div>
+            <div class="nav-menu">
+                <a href="dashboard.html">返回首页</a>
+                <a href="me.html" class="username" id="usernameDisplay"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" id="userContent">
+        <h2>欢迎, <span id="username"></span></h2>
+        <h3>我的作品</h3>
+        <div id="articleList">
+            <div class="error-message">加载中...</div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = async function() {
+            const username = localStorage.getItem('username');
+            if (!username) return window.location.href = '../index.html';
+
+            document.getElementById('usernameDisplay').textContent = username;
+            document.getElementById('username').textContent = username;
+
+            await fetchArticles(username); // 传递当前用户的用户名
+        };
+
+        async function fetchArticles(username) {
+            try {
+                const response = await fetch(`/api/articles?username=${username}`);
+                const articles = await response.json();
+                const articleList = document.getElementById('articleList');
+                articleList.innerHTML = articles.map(article => `
+                    <div class="article-item">
+                        <a href="article.html?id=${article.id}" class="article-title">${article.title}</a>
+                        <div class="article-meta">作者: ${article.username} | 日期: ${article.date}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+                document.getElementById('articleList').innerHTML = '<div class="error-message">加载文章失败</div>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+        }
+        
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #1a1a1a;
+        }
+        
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            z-index: 1;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .register-header h2 {
+            font-size: clamp(20px, 4vw, 24px);
+            word-wrap: break-word;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .register-button,
+        .back-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .register-button {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .register-button:hover {
+            background-color: #218838;
+        }
+        
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .register-container {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .register-button,
+            .back-button {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-height: 600px) {
+            .register-container {
+                margin: 10px auto;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="register-container">
+        <div class="register-header">
+            <h2>用户注册</h2>
+        </div>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label>联系方式类型</label>
+                <select name="contactType" id="contactType" required onchange="updateContactPlaceholder()">
+                    <option value="email">邮箱</option>
+                    <option value="phone">手机号</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>联系方式</label>
+                <input type="text" name="contact" id="contact" required>
+            </div>
+            
+            <div class="form-group">
+                <label>国籍</label>
+                <select name="nationality" required>
+                    <option value="PRC">中国 (PRC)</option>
+                    <option value="USA">美国 (USA)</option>
+                    <option value="PRK">朝鲜 (PRK)</option>
+                    <option value="JPN">日本 (JPN)</option>
+                    <option value="KOR">韩国 (KOR)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" name="confirmPassword" required>
+            </div>
+            
+            <button type="submit" class="register-button">注册</button>
+            <button type="button" class="back-button" onclick="window.location.href='../index.html'">返回登录</button>
+        </form>
+    </div>
+
+    <script src="../assets/js/particles.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle"
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+    </script>
+
+    <script>
+    function updateContactPlaceholder() {
+        const contactType = document.getElementById('contactType').value;
+        const contactInput = document.getElementById('contact');
+        
+        if (contactType === 'email') {
+            contactInput.placeholder = '请输入邮箱地址';
+            contactInput.type = 'email';
+        } else {
+            contactInput.placeholder = '请输入手机号码';
+            contactInput.type = 'tel';
+        }
+    }
+
+    function validateContact(contact, type) {
+        if (type === 'email') {
+            // 邮箱格式验证
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(contact);
+        } else {
+            // 手机号格式验证（简单示例）
+            const phoneRegex = /^\d{11}$/;  // 11位数字
+            return phoneRegex.test(contact);
+        }
+    }
+
+    document.getElementById('registerForm').onsubmit = async function(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const password = form.password.value;
+        const confirmPassword = form.confirmPassword.value;
+        const contactType = form.contactType.value;
+        const contact = form.contact.value;
+        
+        // 密码验证
+        if (password !== confirmPassword) {
+            alert('两次输入的密码不一致！');
+            return;
+        }
+        
+        // 联系方式格式验证
+        if (!validateContact(contact, contactType)) {
+            alert(contactType === 'email' ? '邮箱格式不正确！' : '手机号格式不正确！');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: form.username.value,
+                    contact: contact,
+                    contactType: contactType,
+                    nationality: form.nationality.value,
+                    password: password
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('注册成功！');
+                window.location.href = '../index.html';
+            } else {
+                alert(result.message || '注册失败！');
+            }
+        } catch(error) {
+            console.error('Error:', error);
+            alert('注册过程出现错误，请稍后重试。');
+        }
+    };
+
+    // 页面加载时初始化联系方式输入框
+    document.addEventListener('DOMContentLoaded', updateContactPlaceholder);
+    </script>
+</body>
+</html>
