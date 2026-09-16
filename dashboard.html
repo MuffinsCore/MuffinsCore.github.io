@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .article-card {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .article-content {
+            margin-bottom: 10px;
+        }
+
+        .article-footer {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .article-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .article-title {
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .article-title a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .article-title a:hover {
+            color: #1890ff;
+        }
+
+        .article-stats {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .article-author {
+            font-weight: bold;
+            color: #1890ff;
+        }
+
+        .article-date {
+            color: #999;
+        }
+
+        .article-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="fixed-nav">
+        <div class="header">
+            <div class="logo">.1</div>
+            <div class="datetime-display">
+                <div class="date" id="date"></div>
+                <div class="time" id="time"></div>
+            </div>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-links">
+                <a href="#" onclick="scrollToTop()">首页</a>
+                <a href="#">.6</a>
+                <a href="#">.7</a>
+                <a href="#">.8</a>
+            </div>
+            <a href="me.html" class="username" id="usernameDisplay">.9</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="sidebar">
+            <div class="sidebar-item">.10</div>
+            <div class="sidebar-item">.11</div>
+            <div class="sidebar-item">.12</div>
+            <div class="sidebar-item">.13</div>
+            <div class="sidebar-item">.14</div>
+            <div class="sidebar-item">.15</div>
+            <div class="sidebar-item">.16</div>
+            <div class="sidebar-item">.17</div>
+            <div class="sidebar-item">.18</div>
+            <div class="sidebar-item">.19</div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 添加发布文章按钮 -->
+            <div class="post-button-container">
+                <button class="post-button" onclick="window.location.href='write.html'">发布文章</button>
+            </div>
+
+            <!-- 文章列表 -->
+            <div class="article-list" id="articleList">
+                <!-- 文章会动态插入到这里 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        window.onload = function() {
+            const username = localStorage.getItem('username');
+            if (!username) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            document.getElementById('usernameDisplay').textContent = username;
+            
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        };
+
+        function updateUsername() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('usernameDisplay').textContent = username;
+            }
+        }
+
+        updateUsername();
+
+        function updateDateTime() {
+            const now = new Date();
+            
+            const dateStr = now.getFullYear() + '年' + 
+                          (now.getMonth() + 1) + '月' + 
+                          now.getDate() + '日 ' + 
+                          ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
+            
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                          now.getMinutes().toString().padStart(2, '0') + ':' +
+                          now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('date').textContent = dateStr;
+            document.getElementById('time').textContent = timeStr;
+        }
+
+        // 获取和显示文章列表
+        async function fetchArticles() {
+            try {
+                const response = await fetch('/api/articles');
+                const articles = await response.json();
+                
+                const articleList = document.getElementById('articleList');
+                articleList.innerHTML = articles.map(article => `
+                    <div class="article-card">
+                        <div class="article-header">
+                            <span class="article-author">${article.username || '未知用户'}</span>
+                            <span class="article-date">${formatDate(article.date)}</span>
+                        </div>
+                        <div class="article-title">
+                            <a href="article.html?id=${encodeURIComponent(article.id)}" class="article-title">${article.title || '无标题'}</a>
+                        </div>
+                        <div class="article-stats">
+                            <span title="查看">👁 ${article.views || 0}</span>
+                            <span title="点赞">👍 ${(article.likes || []).length}</span>
+                            <span title="评论">💬 ${(article.comments || []).length}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+                document.getElementById('articleList').innerHTML = '<div class="error-message">加载文章失败</div>';
+            }
+        }
+
+        // 添加日期格式化函数
+        function formatDate(dateStr) {
+            if (!dateStr) return '未知时间';
+            try {
+                // 假设日期格式为 YYYY-MM-DD-HH.MM.SS
+                const [date, time] = dateStr.split('-');
+                const [year, month, day] = date.split('-');
+                return `${year}-${month}-${day}`;
+            } catch (e) {
+                return dateStr;
+            }
+        }
+
+        // 页面加载时获取文章列表
+        window.onload = function() {
+            fetchArticles();
+        };
+    </script>
+</body>
+</html>
