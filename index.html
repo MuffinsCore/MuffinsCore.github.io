@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d12">
+<title>法哥日记 · 六班百科</title>
+<meta name="description" content="来自火山的朋友圈和 2 班同学友情提供">
+<style>
+  :root{
+    --bg:#0b0d12;
+    --text:#e6e8ee;
+    --body:#cfd5e4;
+    --muted:#8b93a7;
+    --line:rgba(255,255,255,.08);
+    --accent:#7c9cff;
+    --accent2:#c084fc;
+  }
+
+  *{box-sizing:border-box}
+
+  html{
+    scroll-behavior:smooth;
+    -webkit-text-size-adjust:100%;
+  }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    font-size:16px;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(900px 620px at 12% -10%, rgba(124,156,255,.16), transparent 65%),
+      radial-gradient(820px 600px at 100% 0%, rgba(192,132,252,.13), transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+
+  ::selection{background:rgba(124,156,255,.35)}
+
+  a{color:var(--accent)}
+
+  .wrap{
+    max-width:820px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- 头部 ---------- */
+  .hero{padding:88px 0 36px}
+
+  .eyebrow{
+    margin:0 0 18px;
+    font-size:.78rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  h1{
+    margin:0 0 14px;
+    font-size:clamp(2.4rem,7vw,3.6rem);
+    line-height:1.12;
+    letter-spacing:-.02em;
+    font-weight:750;
+    color:#e8ecff;
+    background:linear-gradient(100deg,#e8ecff 8%,#a9b8ff 48%,#d8a8ff 92%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  .lede{
+    margin:0;
+    color:var(--muted);
+    font-size:.98rem;
+  }
+
+  .toc{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:30px;
+  }
+
+  .toc a{
+    display:inline-block;
+    padding:7px 14px;
+    border-radius:999px;
+    font-size:.85rem;
+    text-decoration:none;
+    color:#b8c0d4;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.03);
+    transition:color .2s,border-color .2s,background .2s;
+  }
+
+  .toc a:hover{
+    color:#fff;
+    border-color:rgba(160,180,255,.5);
+    background:rgba(124,156,255,.14);
+  }
+
+  /* ---------- 时间线 ---------- */
+  .timeline{
+    position:relative;
+    padding-top:8px;
+    padding-bottom:48px;
+  }
+
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:7px;
+    top:22px;
+    bottom:60px;
+    width:2px;
+    border-radius:2px;
+    background:linear-gradient(180deg,
+      rgba(124,156,255,.55),
+      rgba(192,132,252,.30),
+      transparent);
+  }
+
+  .day{
+    position:relative;
+    padding-left:42px;
+    margin-bottom:46px;
+    scroll-margin-top:24px;
+  }
+
+  .day::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:12px;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--accent);
+    box-shadow:0 0 0 4px rgba(124,156,255,.10);
+    transition:box-shadow .25s,border-color .25s;
+  }
+
+  .day:hover::before{
+    border-color:var(--accent2);
+    box-shadow:0 0 0 6px rgba(192,132,252,.14);
+  }
+
+  .day-title{
+    margin:0 0 16px;
+    font-size:1.12rem;
+    font-weight:650;
+    letter-spacing:.02em;
+    color:#dfe4f5;
+  }
+
+  /* ---------- 卡片 ---------- */
+  .card{
+    padding:24px 26px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+    box-shadow:0 14px 44px -24px rgba(0,0,0,.95);
+    transition:border-color .25s,transform .25s;
+  }
+
+  .card:hover{
+    border-color:rgba(255,255,255,.14);
+    transform:translateY(-2px);
+  }
+
+  .kicker{
+    display:inline-block;
+    margin:0 0 16px;
+    padding:4px 12px;
+    border-radius:999px;
+    font-size:.8rem;
+    font-weight:600;
+    letter-spacing:.06em;
+    color:#a9b8ff;
+    background:rgba(124,156,255,.10);
+    border:1px solid rgba(124,156,255,.24);
+  }
+
+  .intro p{
+    margin:0 0 12px;
+    color:var(--body);
+  }
+
+  .intro p:last-child{
+    margin-bottom:18px;
+    color:#b8c0d4;
+  }
+
+  /* ---------- 条目列表 ---------- */
+  .log{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+
+  .log li{
+    position:relative;
+    padding:10px 0 10px 24px;
+    color:var(--body);
+  }
+
+  .log li + li{
+    border-top:1px solid rgba(255,255,255,.05);
+  }
+
+  .log li::before{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:1.32em;
+    width:6px;
+    height:6px;
+    border-radius:2px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    transform:rotate(45deg);
+  }
+
+  .signoff{
+    margin:18px 0 0;
+    text-align:right;
+    font-size:.9rem;
+    font-style:italic;
+    color:var(--muted);
+  }
+
+  /* ---------- 页脚 ---------- */
+  footer{
+    margin-top:12px;
+    padding:30px 0 72px;
+    border-top:1px solid rgba(255,255,255,.07);
+    font-size:.84rem;
+    line-height:2;
+    color:#6f7789;
+  }
+
+  footer a{
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px solid rgba(139,147,167,.35);
+  }
+
+  footer a:hover{color:#b8c0d4}
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width:640px){
+    .wrap{padding:0 20px}
+    .hero{padding:56px 0 28px}
+    .timeline::before{left:5px}
+    .day{padding-left:32px;margin-bottom:38px}
+    .day::before{width:12px;height:12px;top:13px}
+    .card{padding:20px 18px;border-radius:14px}
+    .log li{padding-left:20px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">六班百科 · 二班档案</p>
+    <h1>法哥日记</h1>
+    <p class="lede">来自火山的朋友圈和 2 班同学友情提供</p>
+    <nav class="toc" aria-label="目录">
+      <a href="#d1016">10 月 16 日</a>
+      <a href="#d1015">10 月 15 日</a>
+      <a href="#d1014">10 月 14 日及以前</a>
+      <a href="#grade8">初二</a>
+      <a href="#grade7">初一</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap timeline">
+
+  <section class="day" id="d1016">
+    <h2 class="day-title">2026年10月16日</h2>
+    <article class="card">
+      <p class="kicker">今日法哥战绩</p>
+      <ul class="log">
+        <li>上生物课犯困被生物老师发现然后开始左脑搏击右脑</li>
+        <li>最可恨的是居然不让孙子辈的唱歌</li>
+        <li>英语课老师问他两个短语的区别(作用上)，他说前面的介词不同</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="day" id="d1015">
+    <h2 class="day-title">2026年10月15日</h2>
+    <article class="card">
+      <p class="kicker">接下来由火山播报今日法哥战绩</p>
+      <ul class="log">
+        <li>想抢孙子辈的酸奶喝未遂</li>
+        <li>在ngx研究题的时候，他冲过来拿起人家的试卷，并大声质问:“你会做题了吗就在这玩”(他把那题解出来了)</li>
+        <li>在晚二时与蚊子搏斗，并大声说蚊子是SB(老师在台上)</li>
+      </ul>
+      <p class="signoff">汇报完毕<br>我法哥最仁慈的一集</p>
+    </article>
+  </section>
+
+  <section class="day" id="d1014">
+    <h2 class="day-title">2026年10月14日 + 以前</h2>
+    <article class="card">
+      <div class="intro">
+        <p>这个cs法哥已经在二班引起公愤了，人干的事他是一个不干啊，火山绝定从今天开始更新他的出生事迹</p>
+        <p>先说说他之前干的：</p>
+      </div>
+      <ul class="log">
+        <li>上课掏他同桌，还把氢氧化钠往同桌78上滴</li>
+        <li>上历史课放逐历史老师</li>
+        <li>晚自习摸他同桌大腿(男的)</li>
+        <li>下了早自习人都在那睡觉，他把睡觉的都叫起来</li>
+        <li>吃饭的时候把我同学打卤面整走，放他碗里涮一涮再放回去</li>
+        <li>请历史老师喝氢氧化钠溶液</li>
+        <li>拿着个柠檬问人家吃不吃</li>
+        <li>偷喝孙子辈的咖啡如入无人之境</li>
+        <li>自己整理笔记，不让别人整理</li>
+        <li>上英语课一直抢答，不给别人思考的机会(还是错的)</li>
+        <li>学无氧呼吸，老师说产生酒精对植物有影响，问他同桌喝没喝过酒，他同桌说喝过，他对他同桌说:“你就该死去”</li>
+        <li>跑操的时候一下课叼着旗就跑，跑到了问人旗手咋不拿旗，非得麻烦他</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="day" id="grade8">
+    <h2 class="day-title">初二</h2>
+    <article class="card">
+      <ul class="log">
+        <li>他不是坐我前面吗，一到下课他就往后一仰，把他那几十年没洗过的头使劲呼啦，弄后位一桌子头皮屑</li>
+        <li>他还喜欢拿金属圆规当牙签用，剔完之后再拿圆规舞扎</li>
+        <li>他还喜欢吃手指</li>
+        <li>他是我们初二年级出了名的口水哥</li>
+        <li>别人一惹他，他就吃手指，然后拿着带着口水的手指捅别人</li>
+        <li>有一次，一个同学把他惹急了，他直接拿舌头往手掌上一舔，啪一下糊在同学的脸上了</li>
+        <li>他还喜欢摸别人的头，还说什么，仙人扶你顶</li>
+        <li>乱急了，他就拿口水恶心你</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="day" id="grade7">
+    <h2 class="day-title">初一</h2>
+    <article class="card">
+      <ul class="log">
+        <li>他们之前有人说过</li>
+        <li>法哥上课的时候掏裤裆被老师发现了</li>
+        <li>然后老师问他干什么</li>
+        <li>他说他在抠皮炎</li>
+      </ul>
+    </article>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>本页整理自 <a href="https://wushisanjiliuban.miraheze.org/wiki/法哥日记" target="_blank" rel="noopener">六班百科《法哥日记》</a>。</p>
+    <p>除非另有声明，本网站内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> 授权。</p>
+  </div>
+</footer>
+
+</body>
+</html>
