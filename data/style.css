@@ -354,3 +354,23 @@ footer a:hover{color:#b8c0d4}
   .disclaimer-mask{padding:16px}
   .disclaimer-box{padding:22px 18px 18px;border-radius:14px}
 }
+/* ---------- 粒子背景 ---------- */
+#particles-js{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+#particles-js canvas{
+  display:block;
+  width:100%!important;
+  height:100%!important;
+}
+
+.hero,
+.timeline,
+footer{
+  position:relative;
+  z-index:1;
+}
