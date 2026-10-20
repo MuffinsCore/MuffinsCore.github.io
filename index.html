@@ -6,279 +6,33 @@
 <meta name="theme-color" content="#0b0d12">
 <title>外星人日记</title>
 <meta name="description" content="外星人想通过监视人类的方式研究人类习性，却殊不知监视到的是伪人。">
-<style>
-  :root{
-    --bg:#0b0d12;
-    --text:#e6e8ee;
-    --body:#cfd5e4;
-    --muted:#8b93a7;
-    --line:rgba(255,255,255,.08);
-    --accent:#7c9cff;
-    --accent2:#c084fc;
-  }
-
-  *{box-sizing:border-box}
-
-  html{
-    scroll-behavior:smooth;
-    -webkit-text-size-adjust:100%;
-  }
-
-  body{
-    margin:0;
-    min-height:100vh;
-    color:var(--text);
-    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
-    font-size:16px;
-    line-height:1.85;
-    -webkit-font-smoothing:antialiased;
-    background:
-      radial-gradient(900px 620px at 12% -10%, rgba(124,156,255,.16), transparent 65%),
-      radial-gradient(820px 600px at 100% 0%, rgba(192,132,252,.13), transparent 60%),
-      var(--bg);
-    background-attachment:fixed;
-  }
-
-  ::selection{background:rgba(124,156,255,.35)}
-
-  a{color:var(--accent)}
-
-  .wrap{
-    max-width:820px;
-    margin:0 auto;
-    padding:0 24px;
-  }
-
-  /* ---------- 头部 ---------- */
-  .hero{padding:88px 0 36px}
-
-  .eyebrow{
-    margin:0 0 18px;
-    font-size:.78rem;
-    letter-spacing:.2em;
-    text-transform:uppercase;
-    color:var(--muted);
-  }
-
-  h1{
-    margin:0 0 14px;
-    font-size:clamp(2.4rem,7vw,3.6rem);
-    line-height:1.12;
-    letter-spacing:-.02em;
-    font-weight:750;
-    color:#e8ecff;
-    background:linear-gradient(100deg,#e8ecff 8%,#a9b8ff 48%,#d8a8ff 92%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-
-  .lede{
-    margin:0;
-    color:var(--muted);
-    font-size:.98rem;
-  }
-
-  .toc{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:30px;
-  }
-
-  .toc a{
-    display:inline-block;
-    padding:7px 14px;
-    border-radius:999px;
-    font-size:.85rem;
-    text-decoration:none;
-    color:#b8c0d4;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,.03);
-    transition:color .2s,border-color .2s,background .2s;
-  }
-
-  .toc a:hover{
-    color:#fff;
-    border-color:rgba(160,180,255,.5);
-    background:rgba(124,156,255,.14);
-  }
-
-  /* ---------- 时间线 ---------- */
-  .timeline{
-    position:relative;
-    padding-top:8px;
-    padding-bottom:48px;
-  }
-
-  .timeline::before{
-    content:"";
-    position:absolute;
-    left:7px;
-    top:22px;
-    bottom:60px;
-    width:2px;
-    border-radius:2px;
-    background:linear-gradient(180deg,
-      rgba(124,156,255,.55),
-      rgba(192,132,252,.30),
-      transparent);
-  }
-
-  .day{
-    position:relative;
-    padding-left:42px;
-    margin-bottom:46px;
-    scroll-margin-top:24px;
-  }
-
-  .day::before{
-    content:"";
-    position:absolute;
-    left:0;
-    top:12px;
-    width:16px;
-    height:16px;
-    border-radius:50%;
-    background:var(--bg);
-    border:2px solid var(--accent);
-    box-shadow:0 0 0 4px rgba(124,156,255,.10);
-    transition:box-shadow .25s,border-color .25s;
-  }
-
-  .day:hover::before{
-    border-color:var(--accent2);
-    box-shadow:0 0 0 6px rgba(192,132,252,.14);
-  }
-
-  .day-title{
-    margin:0 0 16px;
-    font-size:1.12rem;
-    font-weight:650;
-    letter-spacing:.02em;
-    color:#dfe4f5;
-  }
-
-  /* ---------- 卡片 ---------- */
-  .card{
-    padding:24px 26px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
-    box-shadow:0 14px 44px -24px rgba(0,0,0,.95);
-    transition:border-color .25s,transform .25s;
-  }
-
-  .card:hover{
-    border-color:rgba(255,255,255,.14);
-    transform:translateY(-2px);
-  }
-
-  .kicker{
-    display:inline-block;
-    margin:0 0 16px;
-    padding:4px 12px;
-    border-radius:999px;
-    font-size:.8rem;
-    font-weight:600;
-    letter-spacing:.06em;
-    color:#a9b8ff;
-    background:rgba(124,156,255,.10);
-    border:1px solid rgba(124,156,255,.24);
-  }
-
-  .intro p{
-    margin:0 0 12px;
-    color:var(--body);
-  }
-
-  .intro p:last-child{
-    margin-bottom:18px;
-    color:#b8c0d4;
-  }
-
-  /* ---------- 条目列表 ---------- */
-  .log{
-    list-style:none;
-    margin:0;
-    padding:0;
-  }
-
-  .log li{
-    position:relative;
-    padding:10px 0 10px 24px;
-    color:var(--body);
-  }
-
-  .log li + li{
-    border-top:1px solid rgba(255,255,255,.05);
-  }
-
-  .log li::before{
-    content:"";
-    position:absolute;
-    left:5px;
-    top:1.32em;
-    width:6px;
-    height:6px;
-    border-radius:2px;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    transform:rotate(45deg);
-  }
-
-  .signoff{
-    margin:18px 0 0;
-    text-align:right;
-    font-size:.9rem;
-    font-style:italic;
-    color:var(--muted);
-  }
-
-  /* ---------- 页脚 ---------- */
-  footer{
-    margin-top:px;
-    padding:0px 0 0px;
-    border-top:2px solid rgba(255,255,255,.07);
-    font-size:.84rem;
-    line-height:1;
-    color:#6f7789;
-  }
-
-  footer a{
-    color:var(--muted);
-    text-decoration:none;
-    border-bottom:1px solid rgba(139,147,167,.35);
-  }
-
-  footer a:hover{color:#b8c0d4}
-
-  /* ---------- 响应式 ---------- */
-  @media (max-width:640px){
-    .wrap{padding:0 20px}
-    .hero{padding:56px 0 28px}
-    .timeline::before{left:5px}
-    .day{padding-left:32px;margin-bottom:38px}
-    .day::before{width:12px;height:12px;top:13px}
-    .card{padding:20px 18px;border-radius:14px}
-    .log li{padding-left:20px}
-  }
-
-  @media (prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    *{transition:none!important}
-  }
-</style>
+<link rel="stylesheet" href="style.css">
+<noscript><style>.disclaimer-mask{display:none!important}.no-scroll{overflow:auto!important}</style></noscript>
 </head>
 <body>
+
+<div class="disclaimer-mask" id="disclaimer-mask" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+  <div class="disclaimer-box">
+    <h2 class="disclaimer-title" id="disclaimer-title">免责声明</h2>
+    <div class="disclaimer-body">
+      <p>本页面全部内容为虚构创作，仅供娱乐，不指向、不影射任何真实个人、团体或事件。如有雷同，纯属巧合。</p>
+      <p>页面内容不代表任何学校、组织或平台的立场，请勿将其作为事实传播或用于评价他人。</p>
+      <p>继续浏览即表示您已理解上述说明。</p>
+    </div>
+    <p class="disclaimer-hint" id="disclaimer-hint">请阅读以上内容，3 秒后可关闭</p>
+    <button type="button" class="disclaimer-btn" id="disclaimer-btn" disabled>关闭（3）</button>
+  </div>
+</div>
 
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">虚构内容，仅供娱乐。如有雷同，纯属巧合。<a href="https://muffinscore.github.io/mz/">免责声明</a></p>
-    <h1>法哥日记</h1>
+    <h1>外星人监视记录</h1>
     <p class="lede">外星人想通过监视人类的方式研究人类习性，却殊不知监视到的是伪人。</p>
-    <p class="lede">目录</p>
+    <p class="lede">       目录</p>
     <nav class="toc" aria-label="目录">
       
+      <a href="#d1020">10 月 20 日</a>
       <a href="#d1019">10 月 19 日</a>
       <a href="#d1018">10 月 18 日</a>
       <a href="#d1017">10 月 17 日</a>
@@ -293,7 +47,20 @@
 </header>
 
 <main class="wrap timeline">
-  
+  <section class="day" id="d1020">
+    <h2 class="day-title">2026年10月20日</h2>
+    <article class="card">
+      <p class="kicker"></p>
+      <ul class="log">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <p class="signoff"><br></p>
+    </article>
+  </section>
+
   <section class="day" id="d1019">
     <h2 class="day-title">2026年10月19日</h2>
     <article class="card">
@@ -311,10 +78,10 @@
   <section class="day" id="d1018">
     <h2 class="day-title">2026年10月18日</h2>
     <article class="card">
-      <p class="kicker">这都不敢往朋友圈发</p>
+      <p class="kicker">这都不敢往母星发</p>
       <ul class="log">
         <li>上课弹同桌那啥</li>
-        <li>问班里一个同学是不是喜欢萝莉，然后问如果让法哥同桌变成萝莉，会不会超市他</li>
+        <li>问班里一个同学是不是喜欢萝莉，然后问如果让它同桌变成萝莉，会不会超市他</li>
         <li>他今天过来搂着同学，还问他写完了吗，人家不愿理他</li>
         <li>他常用的那个手势像跳舞的小浣熊🤮</li>
       </ul>
@@ -324,7 +91,7 @@
   <section class="day" id="d1016">
     <h2 class="day-title">2026年10月16日</h2>
     <article class="card">
-      <p class="kicker">今日法哥战绩</p>
+      <p class="kicker">今日发哥战绩</p>
       <ul class="log">
         <li>上生物课犯困被生物老师发现然后开始左脑搏击右脑</li>
         <li>最可恨的是居然不让孙子辈的唱歌</li>
@@ -336,13 +103,13 @@
   <section class="day" id="d1015">
     <h2 class="day-title">2026年10月15日</h2>
     <article class="card">
-      <p class="kicker">接下来由火山播报今日法哥战绩</p>
+      <p class="kicker">接下来由火山里新闻播报</p>
       <ul class="log">
         <li>想抢孙子辈的酸奶喝未遂</li>
         <li>在ngx研究题的时候，他冲过来拿起人家的试卷，并大声质问:“你会做题了吗就在这玩”(他把那题解出来了)</li>
         <li>在晚二时与蚊子搏斗，并大声说蚊子是SB(老师在台上)</li>
       </ul>
-      <p class="signoff">汇报完毕<br>我法哥最仁慈的一集</p>
+      <p class="signoff">汇报完毕<br>最仁慈的一集</p>
     </article>
   </section>
 
@@ -350,7 +117,7 @@
     <h2 class="day-title">2026年10月14日 + 以前</h2>
     <article class="card">
       <div class="intro">
-        <p>这个cs法哥已经在二班引起公愤了，人干的事他是一个不干啊，火山绝定从今天开始更新他的出生事迹</p>
+        <p>这个cs伪人已经在二班引起公愤了，人干的事他是一个不干啊，火山里新闻绝定从今天开始更新他的出生事迹</p>
         <p>先说说他之前干的：</p>
       </div>
       <ul class="log">
@@ -391,7 +158,7 @@
     <article class="card">
       <ul class="log">
         <li>他们之前有人说过</li>
-        <li>法哥上课的时候掏裤裆被老师发现了</li>
+        <li>上课的时候掏裤裆被老师发现了</li>
         <li>然后老师问他干什么</li>
         <li>他说他在抠皮炎</li>
       </ul>
@@ -408,12 +175,12 @@
       <p class="kicker">kicker1</p>
       <p class="kicker">kicker2</p>
       <ul class="log">
-        <li>li1</li>
-        <li>li2</li>
-        <li>li3</li>
-        <li>li4</li>
+        <li>log-li1</li>
+        <li>log-li2</li>
+        <li>log-li3</li>
+        <li>log-li4</li>
       </ul>
-      <p class="signoff">class-signoff<br>+br</p>
+      <p class="signoff">class-signoff<br>class-signoff-br</p>
     </article>
   </section>
 
@@ -421,12 +188,54 @@
 
 <footer>
   <div class="wrap">
-    <p>本页整理自 <a href="https://wushisanjiliuban.miraheze.org/wiki/法哥日记" target="_blank" rel="noopener">六班百科《法哥日记》</a>。</p>
     <p>除非另有声明，本网站内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> 授权。</p>
     <p>虚构内容，仅供娱乐。</p>
-    <p>v2.0.2 最后编辑于2026年10月19日22:46</p>
+    <p>v2.1 最后编辑于2026年10月20日13:02</p>
   </div>
 </footer>
+
+<script>
+(function () {
+  var mask = document.getElementById('disclaimer-mask');
+  if (!mask) return;
+
+  var btn  = document.getElementById('disclaimer-btn');
+  var hint = document.getElementById('disclaimer-hint');
+  var left = 3;
+  var timer = null;
+
+  document.body.classList.add('no-scroll');
+
+  function render() {
+    if (left > 0) {
+      btn.disabled = true;
+      btn.textContent = '关闭（' + left + '）';
+      hint.textContent = '请阅读以上内容，' + left + ' 秒后可关闭';
+    } else {
+      btn.disabled = false;
+      btn.textContent = '我知道了';
+      hint.textContent = '';
+    }
+  }
+
+  render();
+
+  timer = setInterval(function () {
+    left--;
+    if (left <= 0) {
+      left = 0;
+      clearInterval(timer);
+    }
+    render();
+  }, 1000);
+
+  btn.addEventListener('click', function () {
+    if (btn.disabled) return;
+    mask.classList.add('is-hidden');
+    document.body.classList.remove('no-scroll');
+  });
+})();
+</script>
 
 </body>
 </html>
