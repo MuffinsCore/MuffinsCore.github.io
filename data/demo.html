@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d12">
+<title>样式示例 · 组件库</title>
+<meta name="description" content="组件库样式总览">
+<link rel="icon" type="image/png" href="data/backg.png">
+<link rel="apple-touch-icon" href="data/backg.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* 仅示例页使用的排版辅助，不属于组件库 */
+  .demo-section{margin:52px 0}
+  .demo-title{
+    margin:0 0 18px;
+    padding-bottom:10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    color:#dfe4f5;
+    font-size:1.05rem;
+    font-weight:650;
+  }
+  .demo-label{
+    margin:22px 0 8px;
+    color:#8b93a7;
+    font-size:.78rem;
+    letter-spacing:.05em;
+  }
+  .demo-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+    margin:12px 0;
+  }
+  .demo-block{margin:16px 0}
+</style>
+</head>
+<body>
+
+<div id="particles-js" aria-hidden="true"></div>
+
+<!-- 顶部导航：默认跟随滚动。把 class 改成 "site-header site-header--fixed" 即固定 -->
+<header class="site-header" id="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href="#">
+      <img src="../data/backg.png" alt="">
+      外星人日记
+    </a>
+    <nav class="site-nav">
+      <a href="#text" class="is-active">文字</a>
+      <a href="#buttons">按钮</a>
+      <a href="#badges">徽章</a>
+      <a href="#notes">提示</a>
+      <a href="#tables">表格</a>
+      <a href="#forms">表单</a>
+      <a href="#misc">其他</a>
+    </nav>
+    <div class="site-actions">
+      <button class="btn btn-sm btn-primary" type="button">示例</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap page">
+
+  <h1>样式总览</h1>
+  <p class="text-muted">组件库示例页，仅用于查看各类样式。标题、段落、组件可自由组合。</p>
+
+  <!-- ================= 正文排版 ================= -->
+  <section class="demo-section" id="text">
+    <h2 class="demo-title">正文排版 .prose</h2>
+    <div class="prose">
+      <h2>二级标题</h2>
+      <p>这是正文段落。行高、段落间距、链接样式都由 <code>.prose</code> 统一控制。支持 <a href="#">普通链接</a>、<strong>加粗</strong>、<em>斜体</em>、行内代码 <code>const a = 1</code>。</p>
+      <h3>三级标题</h3>
+      <ul>
+        <li>无序列表第一项</li>
+        <li>无序列表第二项，含 <a href="#">链接</a></li>
+      </ul>
+      <ol>
+        <li>有序列表第一项</li>
+        <li>有序列表第二项</li>
+      </ol>
+      <blockquote>
+        这是引用块。适合放原文摘录或旁白。
+        <footer>某位同学</footer>
+      </blockquote>
+      <hr>
+      <p>分割线之后又是一段。</p>
+      <p>快捷键写法：<span class="kbd">Ctrl</span> + <span class="kbd">S</span>。</p>
+    </div>
+  </section>
+
+  <!-- ================= 按钮 ================= -->
+  <section class="demo-section" id="buttons">
+    <h2 class="demo-title">按钮</h2>
+
+    <p class="demo-label">基础变体</p>
+    <div class="demo-row">
+      <button class="btn" type="button">默认按钮</button>
+      <button class="btn btn-primary" type="button">主要按钮</button>
+      <button class="btn btn-accent" type="button">渐变按钮</button>
+      <button class="btn btn-outline" type="button">描边按钮</button>
+      <button class="btn btn-ghost" type="button">幽灵按钮</button>
+      <button class="btn btn-danger" type="button">危险按钮</button>
+      <button class="btn btn-success" type="button">成功按钮</button>
+    </div>
+
+    <p class="demo-label">尺寸</p>
+    <div class="demo-row">
+      <button class="btn btn-sm btn-primary" type="button">小按钮</button>
+      <button class="btn btn-primary" type="button">默认尺寸</button>
+      <button class="btn btn-lg btn-primary" type="button">大按钮</button>
+    </div>
+
+    <p class="demo-label">状态</p>
+    <div class="demo-row">
+      <button class="btn btn-primary" type="button" disabled>禁用</button>
+      <button class="btn btn-outline" type="button" aria-disabled="true">aria-disabled</button>
+      <a class="btn btn-primary" href="#">链接按钮</a>
+    </div>
+
+    <p class="demo-label">按钮组与通栏</p>
+    <div class="btn-group">
+      <button class="btn" type="button">上一页</button>
+      <button class="btn btn-primary" type="button">下一页</button>
+    </div>
+    <div class="demo-block" style="max-width:420px">
+      <button class="btn btn-accent btn-block" type="button">通栏按钮</button>
+    </div>
+  </section>
+
+  <!-- ================= 徽章 ================= -->
+  <section class="demo-section" id="badges">
+    <h2 class="demo-title">徽章</h2>
+    <div class="demo-row">
+      <span class="badge">默认</span>
+      <span class="badge badge-blue">蓝色</span>
+      <span class="badge badge-purple">紫色</span>
+      <span class="badge badge-green">绿色</span>
+      <span class="badge badge-yellow">黄色</span>
+      <span class="badge badge-red">红色</span>
+      <span class="badge badge-blue badge-dot">带圆点</span>
+    </div>
+  </section>
+
+  <!-- ================= 提示框 ================= -->
+  <section class="demo-section" id="notes">
+    <h2 class="demo-title">提示框</h2>
+
+    <div class="note">
+      <p>默认提示，适合一般说明。</p>
+    </div>
+
+    <div class="note note-warn">
+      <p class="note-title">注意</p>
+      <p>警告提示，适合提醒风险或易错点。</p>
+    </div>
+
+    <div class="note note-danger">
+      <p class="note-title">危险</p>
+      <p>错误提示，适合表示不可逆操作。</p>
+    </div>
+
+    <div class="note note-success">
+      <p class="note-title">完成</p>
+      <p>成功提示，适合表示操作已生效。</p>
+    </div>
+  </section>
+
+  <!-- ================= 表格 + 信息框 ================= -->
+  <section class="demo-section" id="tables">
+    <h2 class="demo-title">表格与信息框</h2>
+
+    <div class="prose">
+      <div class="infobox">
+        <p class="infobox-title">信息框标题</p>
+        <table>
+          <tr><th>类型</th><td>示例</td></tr>
+          <tr><th>状态</th><td>可用</td></tr>
+          <tr><th>来源</th><td>组件库</td></tr>
+          <tr><th>备注</th><td>右浮动，移动端自动占满</td></tr>
+        </table>
+      </div>
+      <p>信息框会右浮动，正文自动绕排。移动端宽度不足时自动取消浮动、占满整行。下面用一段占位文字展示绕排效果，实际使用时替换成正常内容即可。</p>
+      <p>当内容较短时，信息框旁边的文字可能不足以填满高度，可以在信息框之后加一个清除浮动的元素。</p>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wikitable">
+        <caption>MediaWiki 风格表格</caption>
+        <thead>
+          <tr><th>名称</th><th>类型</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>第一行</td><td>文本</td><td>普通单元格</td></tr>
+          <tr><td>第二行</td><td>数字</td><td>偶数行有底色</td></tr>
+          <tr><td>第三行</td><td>链接</td><td><a href="#">示例链接</a></td></tr>
+          <tr><td>第四行</td><td>状态</td><td><span class="badge badge-green">正常</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= 代码 ================= -->
+  <section class="demo-section">
+    <h2 class="demo-title">代码块</h2>
+    <p class="text-muted">行内代码：<code>&lt;div class="card"&gt;</code></p>
+    <pre class="code-block"><code>&lt;section class="day" id="d1020"&gt;
+  &lt;h2 class="day-title"&gt;2026年10月20日&lt;/h2&gt;
+  &lt;article class="card"&gt;
+    &lt;ul class="log"&gt;
+      &lt;li&gt;条目一&lt;/li&gt;
+      &lt;li&gt;条目二&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/article&gt;
+&lt;/section&gt;</code></pre>
+  </section>
+
+  <!-- ================= 目录框、折叠、引用 ================= -->
+  <section class="demo-section">
+    <h2 class="demo-title">目录框 / 折叠 / 引用</h2>
+
+    <div class="tocbox">
+      <p class="tocbox-title">目录</p>
+      <ol>
+        <li><a href="#text">正文排版</a></li>
+        <li><a href="#buttons">按钮</a>
+          <ol>
+            <li><a href="#buttons">变体</a></li>
+            <li><a href="#buttons">尺寸</a></li>
+          </ol>
+        </li>
+        <li><a href="#tables">表格</a></li>
+      </ol>
+    </div>
+
+    <details class="details">
+      <summary>点击展开详情</summary>
+      <div class="details-body">
+        <p>这里是折叠内容。适合放长说明、补充材料或不想占版面的内容。</p>
+      </div>
+    </details>
+
+    <div class="hatnote">这是一个消歧义提示，常用于“本文介绍的是……，关于……请见……”这类句子。</div>
+
+    <blockquote class="blockquote">
+      这是独立引用块，不依赖 <code>.prose</code>。
+      <footer>匿名</footer>
+    </blockquote>
+  </section>
+
+  <!-- ================= 卡片网格 ================= -->
+  <section class="demo-section">
+    <h2 class="demo-title">卡片与网格</h2>
+    <div class="grid grid-3">
+      <div class="panel">
+        <p class="panel-title">面板一</p>
+        <p class="text-sm text-muted">用于放一组相关信息。</p>
+      </div>
+      <div class="panel">
+        <p class="panel-title">面板二</p>
+        <p class="text-sm text-muted">三列布局，小屏自动变一列。</p>
+      </div>
+      <div class="panel">
+        <p class="panel-title">面板三</p>
+        <p class="text-sm text-muted">也可以换成 <code>.grid-2</code> 或 <code>.grid-auto</code>。</p>
+      </div>
+    </div>
+
+    <p class="demo-label">分割线</p>
+    <hr class="divider">
+    <div class="divider-text">带文字的分割线</div>
+  </section>
+
+  <!-- ================= 表单 ================= -->
+  <section class="demo-section" id="forms">
+    <h2 class="demo-title">表单</h2>
+
+    <div class="field">
+      <label for="demo-name">昵称</label>
+      <input class="input" id="demo-name" type="text" placeholder="输入昵称">
+    </div>
+
+    <div class="field">
+      <label for="demo-select">选择一项</label>
+      <select class="select" id="demo-select">
+        <option>选项一</option>
+        <option>选项二</option>
+        <option>选项三</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="demo-text">留言</label>
+      <textarea class="textarea" id="demo-text" placeholder="写点什么"></textarea>
+    </div>
+
+    <label class="check">
+      <input type="checkbox">
+      我同意以上内容
+    </label>
+  </section>
+
+  <!-- ================= 其他 ================= -->
+  <section class="demo-section" id="misc">
+    <h2 class="demo-title">其他</h2>
+
+    <p class="demo-label">进度条</p>
+    <div class="progress" style="max-width:420px">
+      <div class="progress-bar" style="width:62%"></div>
+    </div>
+
+    <p class="demo-label">分页</p>
+    <nav class="pagination">
+      <span class="is-disabled">上一页</span>
+      <a href="#">1</a>
+      <span class="is-current">2</span>
+      <a href="#">3</a>
+      <a href="#">下一页</a>
+    </nav>
+
+    <p class="demo-label">文字工具类</p>
+    <p class="text-muted">.text-muted 弱化文字</p>
+    <p class="text-accent">.text-accent 强调文字</p>
+    <p class="text-sm">.text-sm 小号文字</p>
+    <p class="text-center">.text-center 居中</p>
+    <p class="mono">.mono 等宽字体</p>
+    <a class="link-arrow" href="#">带箭头的链接</a>
+
+    <p class="demo-label">纯列表</p>
+    <ul class="list-plain">
+      <li>条目一</li>
+      <li>条目二</li>
+      <li>条目三</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>组件库示例页。除非另有声明，本网站内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> 授权。</p>
+  </div>
+</footer>
+
+<script src="data/lz.js"></script>
+<script src="data/bg.js"></script>
+<script>
+(function () {
+  var header = document.getElementById('site-header');
+  if (!header) return;
+
+  var root = document.documentElement;
+
+  function syncHeight() {
+    root.style.setProperty('--header-h', header.offsetHeight + 'px');
+  }
+
+  function onScroll() {
+    header.classList.toggle('is-scrolled', window.scrollY > 8);
+  }
+
+  if (header.classList.contains('site-header--fixed')) {
+    document.body.classList.add('has-fixed-header');
+  }
+
+  syncHeight();
+  onScroll();
+
+  window.addEventListener('resize', syncHeight);
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>
+
+</body>
+</html>
