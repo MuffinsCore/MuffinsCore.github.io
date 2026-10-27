@@ -1291,6 +1291,98 @@ pre.code-block code{
 
 .site-footer a:hover{color:#b8c0d4}
 
+/* ---------- 外星人倒计时 ---------- */
+.countdown{
+  display:inline-block;
+  margin:18px 0;
+  padding:16px 22px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:linear-gradient(180deg,rgba(124,156,255,.10),rgba(192,132,252,.04));
+  box-shadow:var(--shadow-sm);
+}
+
+.countdown-label{
+  margin:0 0 6px;
+  color:var(--muted);
+  font-size:.84rem;
+  letter-spacing:.06em;
+}
+
+.countdown-value{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:4px 10px;
+  margin:0;
+  color:#dfe6ff;
+  font-size:1rem;
+  font-variant-numeric:tabular-nums;
+}
+
+.countdown-value b{
+  font-size:1.7rem;
+  font-weight:700;
+  line-height:1.2;
+  color:#e8ecff;
+  font-variant-numeric:tabular-nums;
+}
+
+.countdown-value span{
+  margin-right:6px;
+  color:var(--muted);
+  font-size:.82rem;
+}
+
+.countdown-value b:last-of-type{
+  color:var(--accent);
+}
+
+/* 结束态 */
+.countdown.is-over{
+  border-color:rgba(74,222,128,.35);
+  background:linear-gradient(180deg,rgba(74,222,128,.10),rgba(74,222,128,.03));
+}
+
+.countdown.is-over .countdown-label{color:#86efac}
+
+/* 头部紧凑版 */
+.countdown--inline{
+  display:inline-flex;
+  align-items:baseline;
+  gap:4px;
+  margin:0;
+  padding:5px 12px;
+  border-radius:var(--radius-pill);
+  background:rgba(124,156,255,.12);
+  border-color:rgba(124,156,255,.28);
+  box-shadow:none;
+  font-size:.82rem;
+  font-variant-numeric:tabular-nums;
+}
+
+.countdown--inline .countdown-label{
+  margin:0 4px 0 0;
+  font-size:.78rem;
+  color:#a9b8ff;
+}
+
+.countdown--inline b{
+  font-size:.9rem;
+  color:#e8ecff;
+}
+
+.countdown--inline span{
+  margin-right:3px;
+  font-size:.74rem;
+  color:var(--muted);
+}
+
+@media (max-width:640px){
+  .countdown{padding:14px 16px}
+  .countdown-value b{font-size:1.4rem}
+  .countdown--inline{display:none}
+}
 /* --------------------------------------------------------------------------
    组件库响应式
    -------------------------------------------------------------------------- */
