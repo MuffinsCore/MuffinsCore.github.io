@@ -13,7 +13,17 @@
 <body>
 
 <div id="particles-js" aria-hidden="true"></div>
-
+<div class="disclaimer-mask" id="disclaimer-mask" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+  <div class="disclaimer-box">
+    <h2 class="disclaimer-title" id="disclaimer-title">请确保您已年满18周岁</h2>
+    <div class="disclaimer-body">
+      <p>继续浏览即表示您已年满十八周岁并理解<a href="mz/">免责声明</a>。</p>
+    </div>
+    <p class="disclaimer-hint" id="disclaimer-hint">请阅读以上内容，1 秒后可关闭</p>
+    <button type="button" class="btn btn-success" id="disclaimer-btn" disabled>关闭（1）</button>
+    <a class="btn btn-danger" href="#" target="_blank" rel="noopener">退出</a>
+  </div>
+</div>
 <header class="site-header" id="site-header">
   <div class="site-header__inner">
     <a class="site-brand" href="#">
@@ -22,7 +32,7 @@
     </a>
 
     <div class="site-actions">
-        <button class="btn btn-sm btn-primary" type="button">示例</button>
+        <a class="btn btn-sm btn-primary" href="jb/" type="button">举报</a>
     </div>
   </div>
 </header>
@@ -126,12 +136,52 @@
   tick();
   var timer = setInterval(tick, 1000);
 
-  // 从后台切回来时立刻刷新一次，避免看到过期数字
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) tick();
   });
 })();
 </script>
+<script>
+(function () {
+  var mask = document.getElementById('disclaimer-mask');
+  if (!mask) return;
 
+  var btn  = document.getElementById('disclaimer-btn');
+  var hint = document.getElementById('disclaimer-hint');
+  var left = 1;
+  var timer = null;
+
+  document.body.classList.add('no-scroll');
+
+  function render() {
+    if (left > 0) {
+      btn.disabled = true;
+      btn.textContent = '（' + left + '）';
+      hint.textContent = '请阅读以上内容，' + left + ' 秒后可关闭';
+    } else {
+      btn.disabled = false;
+      btn.textContent = '进入';
+      hint.textContent = '';
+    }
+  }
+
+  render();
+
+  timer = setInterval(function () {
+    left--;
+    if (left <= 0) {
+      left = 0;
+      clearInterval(timer);
+    }
+    render();
+  }, 1000);
+
+  btn.addEventListener('click', function () {
+    if (btn.disabled) return;
+    mask.classList.add('is-hidden');
+    document.body.classList.remove('no-scroll');
+  });
+})();
+</script>
 </body>
 </html>
