@@ -41,7 +41,7 @@ a{color:var(--accent)}
 }
 
 /* ---------- 头部 ---------- */
-.hero{padding:88px 0 36px}
+.hero{padding:8px 0 6px}
 
 .eyebrow{
   margin:0 0 18px;
@@ -246,7 +246,7 @@ footer a:hover{color:#b8c0d4}
 /* ---------- 响应式 ---------- */
 @media (max-width:640px){
   .wrap{padding:0 20px}
-  .hero{padding:56px 0 28px}
+  .hero{padding:5px 0 2px}
   .timeline::before{left:5px}
   .day{padding-left:32px;margin-bottom:38px}
   .day::before{width:12px;height:12px;top:13px}
