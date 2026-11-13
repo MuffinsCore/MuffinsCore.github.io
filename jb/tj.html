@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>提交失败</title>
+	<style>
+		* { box-sizing: border-box; }
+		body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: #111827; color: #e5e7eb; font: 16px/1.6 system-ui, sans-serif; }
+		main { width: min(100%, 620px); padding: 32px; border: 1px solid #374151; border-radius: 18px; background: #1f2937; box-shadow: 0 24px 70px #0006; }
+		.status { color: #f87171; font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+		h1 { margin: 8px 0; font-size: clamp(26px, 5vw, 38px); }
+		.message { color: #cbd5e1; }
+		.reasons { margin-top: 26px; padding: 18px 20px; border-radius: 12px; background: #111827; }
+		.reasons h2 { margin: 0 0 10px; font-size: 17px; }
+		ul { margin: 0; padding-left: 22px; color: #d1d5db; }
+		li + li { margin-top: 7px; }
+	</style>
+</head>
+<body>
+	<main>
+		<div class="status">● 提交失败</div>
+		<h1>服务器没有响应</h1>
+		<p class="message">你的举报暂时没能送达</p>
+		<section class="reasons" aria-labelledby="reasons-title">
+			<h2 id="reasons-title">可能的原因</h2>
+			<ul>
+				<li>服务器没绷住</li>
+				<li>数据包正在和路由器玩捉迷藏，目前躲得很好</li>
+				<li>没买云服务器</li>
+				<li>没写举报的提交代码</li>
+				<li>举报送到一半被邪恶大手拦下了</li>
+				<li>还有不到1000天就高考了 你的举报声太大 要为高考静音</li>
+				<li>没送礼</li>
+			</ul>
+		</section>
+	</main>
+</body>
+</html>

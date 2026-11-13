@@ -12,34 +12,34 @@
 </head>
 <body>
 
-<main class="wrap page">
+<form class="wrap page" action="tj.html" method="get">
     <div class="field">
         <label for="demo-name">姓名</label>
-        <input class="input" id="demo-name" type="text" placeholder="姓名">
+        <input class="input" id="demo-name" name="name" type="text" placeholder="姓名" required>
         <label for="id">身份证号</label>
-        <input class="input" id="id" type="text" placeholder="输入身份证号">
+        <input class="input" id="id" name="id" type="text" placeholder="输入身份证号" required>
     </div>
 
     <div class="field">
         <label for="demo-select">选择一项</label>
-        <select class="select" id="demo-select">
-        <option>请选择...</option>
-        <option>色情低俗</option>
-        <option>暴力恐怖</option>
-        <option>涉政敏感</option>
+        <select class="select" id="demo-select" name="reason" required>
+        <option value="" disabled selected>请选择...</option>
+        <option value="色情低俗">色情低俗</option>
+        <option value="暴力恐怖">暴力恐怖</option>
+        <option value="涉政敏感">涉政敏感</option>
         </select>
     </div>
 
     <div class="field">
         <label for="demo-text">详细信息</label>
-        <textarea class="textarea" id="demo-text" placeholder="写点什么"></textarea>
+        <textarea class="textarea" id="demo-text" name="details" placeholder="写点什么" required></textarea>
     </div>
 
     <label class="check">
-        <input type="checkbox">
+        <input type="checkbox" required>
         我保证内容真实
     </label>
-    <a class="btn btn-primary" href="tj.html">提交</a>
-</main>
+    <button class="btn btn-primary" type="submit">提交</button>
+</form>
 </body>
 </html>
