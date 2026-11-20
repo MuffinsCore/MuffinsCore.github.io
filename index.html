@@ -43,24 +43,15 @@
     <p class="jth">w哎x应r嗯'中鞥z哎'ji安是i'diq有'中e'是i'qi中哦'yizu's无'是偶ji'x因xide'd昂安ku"</p>
     <a class="btn btn-danger" href="wr/">17号伪人日记</a>
     <a class="btn btn-primary" href="mrxw/">每日新闻</a>
+    <a class="btn btn-success" href="time/">事件计时</a>
     <a href="data/demo.html">示例页面</a>
-    <div class="divider-text"></div>
-    <div class="countdown" id="gaokao-countdown">
-    <p class="countdown-label">距离外星人引爆地球还有</p>
-    <p class="countdown-value">
-        <b data-unit="d">--</b><span>天</span>
-        <b data-unit="h">--</b><span>时</span>
-        <b data-unit="m">--</b><span>分</span>
-        <b data-unit="s">--</b><span>秒</span>
-    </p>
-    </div>
 
 </main>
 <footer>
   <div class="wrap">
     <p>除非另有声明，本网站内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> 授权。</p>
     <p>虚构内容，仅供娱乐。</p>
-    <p>v1.4 最后编辑于2026年11月13日20:11</p>
+    <p>v1.4.1 最后编辑于2026年11月20日22:57</p>
   </div>
 </footer>
 
@@ -93,53 +84,6 @@
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
-</script>
-<script>
-(function () {
-  var box = document.getElementById('gaokao-countdown');
-  if (!box) return;
-
-  var target = new Date('2029-06-07T09:00:00+08:00').getTime();
-  var label = box.querySelector('.countdown-label');
-  var els = {
-    d: box.querySelector('[data-unit="d"]'),
-    h: box.querySelector('[data-unit="h"]'),
-    m: box.querySelector('[data-unit="m"]'),
-    s: box.querySelector('[data-unit="s"]')
-  };
-
-  if (!els.d || !els.h || !els.m || !els.s) return;
-
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-  function tick() {
-    var diff = target - Date.now();
-
-    if (diff <= 0) {
-      els.d.textContent = '0';
-      els.h.textContent = '00';
-      els.m.textContent = '00';
-      els.s.textContent = '00';
-      box.classList.add('is-over');
-      if (label) label.textContent = '他们来了💀';
-      clearInterval(timer);
-      return;
-    }
-
-    var sec = Math.floor(diff / 1000);
-    els.d.textContent = Math.floor(sec / 86400);
-    els.h.textContent = pad(Math.floor(sec % 86400 / 3600));
-    els.m.textContent = pad(Math.floor(sec % 3600 / 60));
-    els.s.textContent = pad(sec % 60);
-  }
-
-  tick();
-  var timer = setInterval(tick, 1000);
-
-  document.addEventListener('visibilitychange', function () {
-    if (!document.hidden) tick();
-  });
-})();
 </script>
 <script>
 (function () {

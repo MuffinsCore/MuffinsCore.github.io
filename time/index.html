@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d12">
+<title>事件计时 · E·T外星人档案库</title>
+<meta name="description" content="人这一辈子 为啥这么难">
+<link rel="icon" type="image/png" href="../data/backg.png">
+<link rel="apple-touch-icon" href="../data/backg.png">
+<link rel="stylesheet" href="../data/style.css">
+<style>
+.timer-page .timeline{padding-top:6px}
+.timer-page .day{margin-bottom:26px}
+.timer-page .day-title{
+  margin:0 0 10px;
+  font-size:.98rem;
+  font-weight:650;
+  letter-spacing:.02em;
+  color:#c2cbe0;
+  font-variant-numeric:tabular-nums;
+}
+.timer-page .card{padding:18px 20px}
+
+/* 事件头：名称 + 徽章 */
+.event-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  margin-bottom:14px;
+}
+.event-name{
+  color:#dfe4f5;
+  font-size:.98rem;
+  font-weight:650;
+  letter-spacing:.01em;
+  line-height:1.5;
+}
+
+/* 卡片内的倒计时：铺满宽度、尺寸收一点 */
+.timer-page .countdown{
+  display:block;
+  width:100%;
+  margin:0;
+  padding:12px 16px;
+  border-radius:12px;
+}
+.timer-page .countdown-value b{font-size:1.5rem}
+.timer-page .countdown-value span{font-size:.78rem}
+
+/* 已发生：改成正计时，整体压暗 */
+.timer-page .countdown.is-past{
+  border-color:rgba(255,255,255,.09);
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+  box-shadow:none;
+}
+.timer-page .countdown.is-past .countdown-label{color:#6f7789}
+.timer-page .countdown.is-past .countdown-value b,
+.timer-page .countdown.is-past .countdown-value b:last-of-type{color:#9aa4ba}
+
+.day.is-past .day-title{color:#7b8497}
+.day.is-past .event-name{color:#9aa4ba}
+.day.is-past .badge{opacity:.7}
+.day.is-past::before{
+  border-color:#5b6478;
+  box-shadow:none;
+}
+
+/* 图例 */
+.timer-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:24px 0 6px;
+}
+
+@media (max-width:640px){
+  .timer-page .card{padding:16px}
+  .timer-page .countdown-value b{font-size:1.28rem}
+  .timer-page .countdown{padding:10px 12px}
+}
+</style>
+</head>
+<body>
+
+<div id="particles-js" aria-hidden="true"></div>
+
+<header class="site-header" id="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href="../index.html">
+      <img src="../data/backg.png" alt="">
+      外星人档案库
+    </a>
+    <div class="site-actions">
+      <a class="btn btn-sm btn-outline" href="../index.html">返回首页</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap page timer-page">
+
+  <h2>事件计时</h2>
+  <p class="text-muted">人这一辈子 为啥这么难</p>
+
+  <div class="timer-legend">
+    <span class="badge badge-red badge-dot">开学</span>
+    <span class="badge badge-green badge-dot">放假</span>
+    <span class="badge badge-yellow badge-dot">考试（推测）</span>
+    <span class="badge badge-purple badge-dot">关键节点</span>
+  </div>
+
+  <div class="note note-warn">
+    <p class="note-title">关于时间</p>
+    <p>开学、放假日期参照往年校历推测；期中、期末考试及模拟考试时间均为推测值</p>
+  </div>
+
+  <div class="divider-text">时间线</div>
+
+  <div class="timeline">
+
+    <!-- 2026 -->
+    <article class="day">
+      <h2 class="day-title">2026年6月13日 09:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">聊城市中考开考</span>
+          <span class="badge badge-purple badge-dot">关键节点</span>
+        </div>
+        <div class="countdown" data-target="2026-06-13T09:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2026年6月15日 17:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">中考结束</span>
+          <span class="badge badge-purple badge-dot">关键节点</span>
+        </div>
+        <div class="countdown" data-target="2026-06-15T17:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2026年7月6日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">初中暑假开始</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2026-07-06T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2026年9月1日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高一开学</span>
+          <span class="badge badge-red badge-dot">开学</span>
+        </div>
+        <div class="countdown" data-target="2026-09-01T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2026年10月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">国庆节假期</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2026-10-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2026年11月18日 07:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高一期中考试</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2026-11-09T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2027 -->
+    <article class="day">
+      <h2 class="day-title">2027年1月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">元旦假期</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-01-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年1月25日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高一上学期期末考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2027-01-25T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年2月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">寒假开始</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-02-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年2月6日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">春节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-02-06T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年2月22日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高一下学期开学</span>
+          <span class="badge badge-red badge-dot">开学</span>
+        </div>
+        <div class="countdown" data-target="2027-02-22T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年4月5日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">清明节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-04-05T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年5月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">劳动节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-05-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年6月9日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">端午节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-06-09T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年7月5日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高一下学期期末考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2027-07-05T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年7月12日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">暑假开始</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-07-12T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年9月1日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高二开学</span>
+          <span class="badge badge-red badge-dot">开学</span>
+        </div>
+        <div class="countdown" data-target="2027-09-01T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年10月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">国庆节假期</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2027-10-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2027年11月8日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高二期中考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2027-11-08T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2028 -->
+    <article class="day">
+      <h2 class="day-title">2028年1月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">元旦假期</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-01-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年1月17日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高二上学期期末考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2028-01-17T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年1月24日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">寒假开始</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-01-24T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年1月26日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">春节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-01-26T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年2月14日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高二下学期开学</span>
+          <span class="badge badge-red badge-dot">开学</span>
+        </div>
+        <div class="countdown" data-target="2028-02-14T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年4月4日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">清明节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-04-04T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年5月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">劳动节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-05-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年5月28日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">端午节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-05-28T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年7月3日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高二下学期期末考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2028-07-03T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年7月10日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">暑假开始</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-07-10T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年8月31日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三开学</span>
+          <span class="badge badge-red badge-dot">开学</span>
+        </div>
+        <div class="countdown" data-target="2028-08-31T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年10月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">国庆节假期</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2028-10-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2028年11月6日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三期中考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2028-11-06T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2029 -->
+    <article class="day">
+      <h2 class="day-title">2029年1月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">元旦假期</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2029-01-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年1月15日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三上学期期末考试（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2029-01-15T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年1月22日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">寒假开始</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2029-01-22T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年2月13日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">春节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2029-02-13T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年2月26日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三下学期开学</span>
+          <span class="badge badge-red badge-dot">开学</span>
+        </div>
+        <div class="countdown" data-target="2029-02-26T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年3月12日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三一模（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2029-03-12T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年4月4日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">清明节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2029-04-04T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年4月16日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三二模（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2029-04-16T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年5月1日</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">劳动节</span>
+          <span class="badge badge-green badge-dot">放假</span>
+        </div>
+        <div class="countdown" data-target="2029-05-01T00:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年5月8日 08:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高三三模（推测）</span>
+          <span class="badge badge-yellow badge-dot">考试</span>
+        </div>
+        <div class="countdown" data-target="2029-05-08T08:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年6月7日 09:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高考开考</span>
+          <span class="badge badge-purple badge-dot">关键节点</span>
+        </div>
+        <div class="countdown" data-target="2029-06-07T09:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="day">
+      <h2 class="day-title">2029年6月10日 17:00</h2>
+      <div class="card">
+        <div class="event-head">
+          <span class="event-name">高考结束</span>
+          <span class="badge badge-purple badge-dot">关键节点</span>
+        </div>
+        <div class="countdown" data-target="2029-06-10T17:00:00+08:00">
+          <p class="countdown-label">距开始还有</p>
+          <p class="countdown-value"><b data-unit="d">--</b><span>天</span><b data-unit="h">--</b><span>时</span><b data-unit="m">--</b><span>分</span><b data-unit="s">--</b><span>秒</span></p>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>虚构内容，仅供娱乐。日期均为推测，请以学校实际通知为准。</p>
+    <p>除非另有声明，本网站内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> 授权。</p>
+    <p>v1.1 最后编辑于2026年11月20日22:57</p>
+  </div>
+</footer>
+
+<script src="../data/lz.js"></script>
+<script src="../data/bg.js"></script>
+<script>
+/* ---------- 头部滚动状态 ---------- */
+(function () {
+  var header = document.getElementById('site-header');
+  if (!header) return;
+
+  var root = document.documentElement;
+
+  function syncHeight() {
+    root.style.setProperty('--header-h', header.offsetHeight + 'px');
+  }
+
+  function onScroll() {
+    header.classList.toggle('is-scrolled', window.scrollY > 8);
+  }
+
+  if (header.classList.contains('site-header--fixed')) {
+    document.body.classList.add('has-fixed-header');
+  }
+
+  syncHeight();
+  onScroll();
+
+  window.addEventListener('resize', syncHeight);
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>
+<script>
+/* ---------- 事件计时：未来倒计时 / 过去正计时 ---------- */
+(function () {
+  var boxes = document.querySelectorAll('.countdown[data-target]');
+  if (!boxes.length) return;
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  var items = [];
+
+  Array.prototype.forEach.call(boxes, function (box) {
+    var target = new Date(box.getAttribute('data-target')).getTime();
+    if (isNaN(target)) return;
+
+    var d = box.querySelector('[data-unit="d"]');
+    var h = box.querySelector('[data-unit="h"]');
+    var m = box.querySelector('[data-unit="m"]');
+    var s = box.querySelector('[data-unit="s"]');
+    if (!d || !h || !m || !s) return;
+
+    items.push({
+      target: target,
+      label: box.querySelector('.countdown-label'),
+      futureText: box.getAttribute('data-label-future') || '距开始还有',
+      pastText: box.getAttribute('data-label-past') || '已过去',
+      d: d, h: h, m: m, s: s,
+      box: box,
+      day: box.closest ? box.closest('.day') : null
+    });
+  });
+
+  function tick() {
+    var now = Date.now();
+
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      var diff = it.target - now;
+      var past = diff <= 0;
+      var sec = Math.floor(Math.abs(diff) / 1000);
+
+      it.d.textContent = Math.floor(sec / 86400);
+      it.h.textContent = pad(Math.floor(sec % 86400 / 3600));
+      it.m.textContent = pad(Math.floor(sec % 3600 / 60));
+      it.s.textContent = pad(sec % 60);
+
+      if (it.label) it.label.textContent = past ? it.pastText : it.futureText;
+      it.box.classList.toggle('is-past', past);
+      if (it.day) it.day.classList.toggle('is-past', past);
+    }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) tick();
+  });
+})();
+</script>
+</body>
+</html>
