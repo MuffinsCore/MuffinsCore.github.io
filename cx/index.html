@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d12">
+<title>查</title>
+<style>
+:root{
+  --bg:#0b0d12;
+  --text:#e6e8ee;
+  --body:#cfd5e4;
+  --muted:#8b93a7;
+  --line:rgba(255,255,255,.09);
+  --accent:#7c9cff;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 620px at 12% -10%, rgba(124,156,255,.16), transparent 65%),
+    radial-gradient(820px 600px at 100% 0%, rgba(192,132,252,.13), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+
+::selection{background:rgba(124,156,255,.35)}
+
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+  padding:0 20px 60px;
+}
+
+/* ---------- 页头 ---------- */
+.page-head{padding:40px 0 24px}
+
+.page-head h1{
+  margin:0 0 8px;
+  font-size:clamp(1.8rem,5vw,2.4rem);
+  line-height:1.2;
+  letter-spacing:-.01em;
+  font-weight:750;
+  color:#e8ecff;
+  background:linear-gradient(100deg,#e8ecff 8%,#a9b8ff 52%,#d8a8ff 94%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.page-head .sub{
+  margin:0;
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+/* ---------- 搜索框 ---------- */
+.search-bar{
+  position:relative;
+  margin:0 0 16px;
+}
+
+.search-input{
+  width:100%;
+  padding:14px 48px 14px 18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(0,0,0,.3);
+  color:var(--text);
+  font:inherit;
+  font-size:1rem;
+  -webkit-appearance:none;
+  appearance:none;
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+
+.search-input::placeholder{color:#6f7789}
+
+.search-input:focus{
+  outline:none;
+  border-color:rgba(124,156,255,.6);
+  background:rgba(0,0,0,.4);
+  box-shadow:0 0 0 3px rgba(124,156,255,.16);
+}
+
+.search-input::-webkit-search-cancel-button{display:none}
+
+.search-clear{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  border-radius:8px;
+  background:rgba(255,255,255,.08);
+  color:#b8c0d4;
+  font-size:.9rem;
+  line-height:1;
+  cursor:pointer;
+  transition:background .2s, color .2s;
+}
+
+.search-clear:hover{background:rgba(255,255,255,.16); color:#fff}
+
+/* ---------- 统计 / 空状态 ---------- */
+.stat{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:.84rem;
+}
+
+.empty{
+  margin:40px 0;
+  padding:32px 20px;
+  border:1px dashed rgba(255,255,255,.12);
+  border-radius:14px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+.empty strong{color:#b8c0d4;font-weight:600}
+
+/* ---------- 卡片 ---------- */
+.cards{display:grid; gap:16px}
+
+.student-card{
+  padding:20px 22px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  box-shadow:0 14px 44px -26px rgba(0,0,0,.95);
+  transition:border-color .25s, transform .25s, opacity .25s;
+}
+
+.student-card:hover{
+  border-color:rgba(255,255,255,.17);
+  transform:translateY(-2px);
+}
+
+/* 已转出：整体压暗 */
+.student-card.is-out{opacity:.5}
+.student-card.is-out:hover{opacity:.75}
+
+.card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.card-name{
+  margin:0;
+  font-size:1.75rem;
+  font-weight:750;
+  line-height:1.25;
+  letter-spacing:.02em;
+  color:#e8ecff;
+  word-break:break-word;
+}
+
+/* ---------- 徽章 ---------- */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  flex:0 0 auto;
+  padding:4px 12px;
+  border:1px solid transparent;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:650;
+  letter-spacing:.02em;
+  line-height:1.5;
+  white-space:nowrap;
+}
+
+.badge-gold{color:#fcd34d; background:rgba(251,191,36,.14); border-color:rgba(251,191,36,.40)}
+.badge-green{color:#86efac; background:rgba(74,222,128,.12); border-color:rgba(74,222,128,.32)}
+.badge-red{color:#fca5a5; background:rgba(248,113,113,.12); border-color:rgba(248,113,113,.32)}
+
+/* ---------- 信息区 ---------- */
+.card-info{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:10px 22px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.info-item{
+  display:flex;
+  gap:10px;
+  font-size:.9rem;
+  line-height:1.65;
+}
+
+.info-label{
+  flex:0 0 auto;
+  min-width:4.5em;
+  color:var(--muted);
+}
+
+.info-value{
+  color:var(--body);
+  word-break:break-word;
+}
+
+/* ---------- 页脚 ---------- */
+.page-foot{
+  margin-top:44px;
+  padding-top:20px;
+  border-top:1px solid var(--line);
+  color:#6f7789;
+  font-size:.82rem;
+  line-height:1.8;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:640px){
+  .wrap{padding:0 16px 48px}
+  .page-head{padding:32px 0 20px}
+  .student-card{padding:17px 17px}
+  .card-name{font-size:1.45rem}
+  .card-info{grid-template-columns:1fr; gap:8px}
+  .card-top{gap:10px}
+}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <header class="page-head">
+    <h1>查</h1>
+    <p class="sub">输入完整姓名（或拼音）后显示同学卡片</p>
+  </header>
+
+  <div class="search-bar">
+    <input class="search-input" id="search" type="text"
+           placeholder="输入完整姓名或拼音，例如：张欲晓/zyx/zhao yu xiao"
+           autocomplete="off" spellcheck="false">
+    <button class="search-clear" id="clear" type="button" aria-label="清空" hidden>✕</button>
+  </div>
+
+  <p class="stat" id="stat"></p>
+
+  <div class="cards" id="cards"></div>
+
+  <p class="empty" id="empty"></p>
+
+  <footer class="page-foot">
+    <p>v0.1 最后编辑于2026年11月20日23:43:09</p>
+    <p>查询需完全匹配姓名；也可用拼音全拼或首字母精确查询。</p>
+  </footer>
+
+</main>
+
+
+<script>
+
+
+const STUDENTS = [
+  { name: '张希乐', pinyin: 'zhang xi le',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李文嵩', pinyin: 'li wen song',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李宇涵', pinyin: 'li yu han',     status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王海博', pinyin: 'wang hai bo',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '陈柯绮', pinyin: 'chen ke qi',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '付合政', pinyin: 'fu he zheng',   status: 'founder', commute: '自行车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '牛国旭', pinyin: 'niu guo xu',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李金灿', pinyin: 'li jin can',    status: 'founder', commute: '步行',     gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘宇昌', pinyin: 'liu yu chang',  status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘美硕', pinyin: 'liu mei shuo',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '袁新佑', pinyin: 'yuan xin you',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王守润', pinyin: 'wang shou run', status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '范泽正', pinyin: 'fan ze zheng',  status: 'founder', commute: '步行',     gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '高诗棋', pinyin: 'gao shi qi',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李姿涵', pinyin: 'li zi han',     status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '卢雅琪', pinyin: 'lu ya qi',      status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '董家诚', pinyin: 'dong jia cheng',status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '田昊德', pinyin: 'tian hao de',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王浩宇', pinyin: 'wang hao yu',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '徐辛雅', pinyin: 'xu xin ya',     status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '吴语萱', pinyin: 'wu yu xuan',    status: 'founder', commute: '步行',     gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘士哲', pinyin: 'liu shi zhe',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '朱哲宇', pinyin: 'zhu zhe yu',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王之硕', pinyin: 'wang zhi shuo', status: 'transferOut', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '郭若涵', pinyin: 'guo ruo han',   status: 'founder', commute: '自行车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李保文', pinyin: 'li bao wen',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王心悦', pinyin: 'wang xin yue',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '姜宇泽', pinyin: 'jiang yu ze',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王锦溪', pinyin: 'wang jin xi',   status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '赵沛林', pinyin: 'zhao pei lin',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '张民涛', pinyin: 'zhang min tao', status: 'founder', commute: '步行',     gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘凡可', pinyin: 'liu fan ke',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李梓萌', pinyin: 'li zi meng',    status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李欣怡', pinyin: 'li xin yi',     status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李祥屹', pinyin: 'li xiang yi',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李齐麟', pinyin: 'li qi lin',     status: 'founder', commute: '步行',     gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '李宗涵', pinyin: 'li zong han',   status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘瑾萱', pinyin: 'liu jin xuan',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘佳鑫', pinyin: 'liu jia xin',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '杨宗洁', pinyin: 'yang zong jie', status: 'founder', commute: '步行',     gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '姜自轩', pinyin: 'jiang zi xuan', status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '杜沛文', pinyin: 'du pei wen',    status: 'founder', commute: '自行车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '许梓墨', pinyin: 'xu zi mo',      status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '邱佳印', pinyin: 'qiu jia yin',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '赵婧琪', pinyin: 'zhao jing qi',  status: 'founder', commute: '自行车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '孙悦彤', pinyin: 'sun yue tong',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '叶晁煊', pinyin: 'ye chao xuan',  status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '刘雨泽', pinyin: 'liu yu ze',     status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '付高艺', pinyin: 'fu gao yi',     status: 'founder', commute: '家长接送', gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '王先法', pinyin: 'wang xian fa',  status: 'founder', commute: '自行车',   gender: '', sf: '学生', rank: '', hobby: '' },
+  { name: '金佳卉', pinyin: 'jin jia hui',   status: 'founder', commute: '电动车',   gender: '', sf: '学生', rank: '', hobby: '' },  
+  { name: '张欲晓', pinyin: 'zhang yu xiao',  status: 'founder', commute: '自行车',   gender: '', sf: '班主任', rank: '', hobby: '' },
+];
+
+/* 卡片显示字段：只有 commute 有值，其余字段留空（空值不会渲染） */
+const FIELDS = [
+  { key: 'commute',   label: '上下学方式' },
+  { key: 'gender',    label: '性别' },
+  { key: 'sf', label: '身份' },
+  { key: 'rank',      label: '排名' },
+  { key: 'hobby',     label: '爱好' }
+];
+
+const STATUS = {
+  founder:     { text: '创班成员', cls: 'badge-gold'  },
+  transferIn:  { text: '后转入',   cls: 'badge-green' },
+  transferOut: { text: '已转出',   cls: 'badge-red'   }
+};
+
+
+(function () {
+  var inputEl = document.getElementById('search');
+  var clearEl = document.getElementById('clear');
+  var cardsEl = document.getElementById('cards');
+  var statEl  = document.getElementById('stat');
+  var emptyEl = document.getElementById('empty');
+
+  var NAME_KEY = 'name';
+
+  function esc(v) {
+    return String(v).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function normalize(s) {
+    return String(s == null ? '' : s).replace(/\s+/g, '').toLowerCase();
+  }
+  function pinyinForms(st) {
+    var p = String(st.pinyin || '').trim().toLowerCase();
+    if (!p) return [];
+
+    var forms = [p.replace(/\s+/g, '')];   // 全拼：zhangsan
+    var parts = p.split(/\s+/).filter(Boolean);
+
+    if (parts.length > 1) {
+      forms.push(parts.map(function (x) { return x.charAt(0); }).join('')); // 首字母：zs
+    }
+    return forms;
+  }
+  function isMatch(st, q) {
+    if (!q) return false;
+    if (normalize(st[NAME_KEY]) === q) return true;
+    return pinyinForms(st).some(function (f) { return f === q; });
+  }
+  function renderCard(st) {
+    var statusKey = String(st.status || '').trim();
+    var meta = STATUS[statusKey] || { text: statusKey || '未知', cls: 'badge-gold' };
+    var infoHTML = FIELDS
+      .filter(function (f) {
+        var v = st[f.key];
+        return v !== undefined && v !== null && v !== '';
+      })
+      .map(function (f) {
+        return '<div class="info-item">' +
+                 '<span class="info-label">' + esc(f.label) + '</span>' +
+                 '<span class="info-value">' + esc(st[f.key]) + '</span>' +
+               '</div>';
+      })
+      .join('');
+    return '<article class="student-card' +
+             (statusKey === 'transferOut' ? ' is-out' : '') + '">' +
+             '<div class="card-top">' +
+               '<h2 class="card-name">' + esc(st[NAME_KEY]) + '</h2>' +
+               '<span class="badge ' + meta.cls + '">' + esc(meta.text) + '</span>' +
+             '</div>' +
+             (infoHTML ? '<div class="card-info">' + infoHTML + '</div>' : '') +
+           '</article>';
+  }
+  function render() {
+    var q = normalize(inputEl.value);
+    clearEl.hidden = !inputEl.value;
+    /* 空输入：什么都不显示，只给一句提示 */
+    if (!q) {
+      cardsEl.innerHTML = '';
+      statEl.textContent = '';
+      emptyEl.hidden = false;
+      emptyEl.innerHTML = '请输入<strong>完整姓名</strong>后查看同学卡片。';
+      return;
+    }
+
+    var list = STUDENTS.filter(function (s) { return isMatch(s, q); });
+
+    if (list.length === 0) {
+      cardsEl.innerHTML = '';
+      statEl.textContent = '';
+      emptyEl.hidden = false;
+      emptyEl.innerHTML = '未找到完全匹配的同学。<br>请检查姓名是否完整准确，或换用拼音全拼 / 首字母';
+      return;
+    }
+    emptyEl.hidden = true;
+    statEl.textContent = '找到 ' + list.length + ' 位同学';
+    cardsEl.innerHTML = list.map(renderCard).join('');
+  }
+  inputEl.addEventListener('input', render);
+  clearEl.addEventListener('click', function () {
+    inputEl.value = '';
+    inputEl.focus();
+    render();
+  });
+  inputEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      inputEl.value = '';
+      render();
+    }
+  });
+  render();
+})();
+</script>
+</body>
+</html>
