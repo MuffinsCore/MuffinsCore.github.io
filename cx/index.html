@@ -238,11 +238,11 @@ body{
 <main class="wrap">
   <header class="page-head">
     <h1>查</h1>
-    <p class="sub">输入完整姓名（或拼音）后显示同学卡片</p>
+    <p class="sub">输入完整姓名（或拼音）后显示卡片</p>
   </header>
   <div class="search-bar">
     <input class="search-input" id="search" type="text"
-           placeholder="输入完整姓名或拼音，例如：张希乐 / zxl / zhang xi le"
+           placeholder="输入完整姓名或拼音，例如：张欲晓 / zyx / zhang yu xiao"
            autocomplete="off" spellcheck="false">
     <button class="search-clear" id="clear" type="button" aria-label="清空" hidden>✕</button>
   </div>
@@ -250,63 +250,72 @@ body{
   <div class="cards" id="cards"></div>
   <p class="empty" id="empty"></p>
   <footer class="page-foot">
-    <p>v0.2 最后编辑于2026年11月22日23:30</p>
+    <p>v0.2.2 最后编辑于2026年11月22日23:30</p>
     <p>查询需完全匹配姓名；也可用拼音全拼或首字母精确查询。</p>
   </footer>
 </main>
 <script>
 const STUDENTS_CSV = `name,pinyin,status,commute,gender,sf,rank,hobby
-张希乐,zhang xi le,founder,电动车,,,,
-李文嵩,li wen song,founder,电动车,,,,
-李宇涵,li yu han,founder,家长接送,,,,
-王海博,wang hai bo,founder,电动车,,,,
-陈柯绮,chen ke qi,founder,电动车,,,,
-付合政,fu he zheng,founder,自行车,,,,
-牛国旭,niu guo xu,founder,电动车,,,,
-李金灿,li jin can,founder,步行,,,,
-刘宇昌,liu yu chang,founder,家长接送,,,,
-刘美硕,liu mei shuo,founder,电动车,,,,
-袁新佑,yuan xin you,founder,电动车,,,,
-王守润,wang shou run,founder,电动车,,,,
-范泽正,fan ze zheng,founder,步行,,,,
-高诗棋,gao shi qi,founder,电动车,,,,
-李姿涵,li zi han,founder,电动车,,,,
-卢雅琪,lu ya qi,founder,电动车,,,,
-董家诚,dong jia cheng,founder,家长接送,,,,
-田昊德,tian hao de,founder,电动车,,,,
-王浩宇,wang hao yu,founder,电动车,,,,
-徐辛雅,xu xin ya,founder,电动车,,,,
-吴语萱,wu yu xuan,founder,步行,,,,
-刘士哲,liu shi zhe,founder,电动车,,,,
-朱哲宇,zhu zhe yu,founder,电动车,,,,
-王之硕,wang zhi shuo,founder,家长接送,,,,
-郭若涵,guo ruo han,founder,自行车,,,,
-李保文,li bao wen,founder,电动车,,,,
-王心悦,wang xin yue,founder,电动车,,,,
-姜宇泽,jiang yu ze,founder,电动车,,,,
-王锦溪,wang jin xi,founder,家长接送,,,,
-赵沛林,zhao pei lin,founder,电动车,,,,
-张民涛,zhang min tao,founder,步行,,,,
-刘凡可,liu fan ke,founder,电动车,,,,
-李梓萌,li zi meng,founder,电动车,,,,
-李欣怡,li xin yi,founder,电动车,,,,
-李祥屹,li xiang yi,founder,电动车,,,,
-李齐麟,li qi lin,founder,步行,,,,
-李宗涵,li zong han,founder,家长接送,,,,
-刘瑾萱,liu jin xuan,founder,电动车,,,,
-刘佳鑫,liu jia xin,founder,电动车,,,,
-杨宗洁,yang zong jie,founder,步行,,,,
-姜自轩,jiang zi xuan,founder,家长接送,,,,
-杜沛文,du pei wen,founder,自行车,,,,
-许梓墨,xu zi mo,founder,电动车,,,,
-邱佳印,qiu jia yin,founder,电动车,,,,
-赵婧琪,zhao jing qi,founder,自行车,,,,
-孙悦彤,sun yue tong,founder,电动车,,,,
-叶晁煊,ye chao xuan,founder,电动车,,,,
-刘雨泽,liu yu ze,founder,电动车,,,,
-付高艺,fu gao yi,founder,家长接送,,,,
-王先法,wang xian fa,founder,自行车,,,,
-金佳卉,jin jia hui,founder,电动车,,,,`;
+张希乐,zhang xi le,founder,电动车,,学生,,
+李文嵩,li wen song,founder,电动车,,学生,,
+李宇涵,li yu han,founder,家长接送,,学生,,
+王海博,wang hai bo,founder,电动车,,学生,,
+陈柯绮,chen ke qi,founder,电动车,,学生,,
+付合政,fu he zheng,founder,自行车,,学生,,
+牛国旭,niu guo xu,founder,电动车,,学生,,
+李金灿,li jin can,founder,步行,,学生,,
+刘宇昌,liu yu chang,founder,家长接送,,学生,,
+刘美硕,liu mei shuo,founder,电动车,,学生,,
+袁新佑,yuan xin you,founder,电动车,,学生,,
+王守润,wang shou run,founder,电动车,,学生,,
+范泽正,fan ze zheng,founder,步行,,学生,,
+高诗棋,gao shi qi,founder,电动车,,学生,,
+李姿涵,li zi han,founder,电动车,,学生,,
+卢雅琪,lu ya qi,founder,电动车,,学生,,
+董家诚,dong jia cheng,founder,家长接送,,学生,,
+田昊德,tian hao de,founder,电动车,,学生,,
+王浩宇,wang hao yu,founder,电动车,,学生,,
+徐辛雅,xu xin ya,founder,电动车,,学生,,
+吴语萱,wu yu xuan,founder,步行,,学生,,
+刘士哲,liu shi zhe,founder,电动车,,学生,,
+朱哲宇,zhu zhe yu,founder,电动车,,班长,,
+王之硕,wang zhi shuo,Out,,,学生,,
+郭若涵,guo ruo han,founder,自行车,,学生,,
+李保文,li bao wen,founder,电动车,,学生,,
+王心悦,wang xin yue,founder,电动车,,学生,,
+姜宇泽,jiang yu ze,founder,电动车,,学生,,
+王锦溪,wang jin xi,founder,家长接送,,学生,,
+赵沛林,zhao pei lin,founder,电动车,,学生,,
+张民涛,zhang min tao,founder,步行,,学生,,
+刘凡可,liu fan ke,founder,电动车,,学生,,
+李梓萌,li zi meng,founder,电动车,,学生,,
+李欣怡,li xin yi,founder,电动车,,学生,,
+李祥屹,li xiang yi,founder,电动车,,学生,,
+李齐麟,li qi lin,founder,步行,,学生,,
+李宗涵,li zong han,founder,家长接送,,学生,,
+刘瑾萱,liu jin xuan,founder,电动车,,学生,,
+刘佳鑫,liu jia xin,founder,电动车,,学生,,
+杨宗洁,yang zong jie,founder,步行,,学生,,
+姜自轩,jiang zi xuan,founder,家长接送,,学生,,
+杜沛文,du pei wen,founder,自行车,,学生,,
+许梓墨,xu zi mo,founder,电动车,,学生,,
+邱佳印,qiu jia yin,founder,电动车,,学生,,
+赵婧琪,zhao jing qi,founder,自行车,,学生,,
+孙悦彤,sun yue tong,founder,电动车,,学生,,
+叶晁煊,ye chao xuan,founder,电动车,,学生,,
+刘雨泽,liu yu ze,founder,电动车,,学生,,
+付高艺,fu gao yi,founder,家长接送,,学生,,男娘
+王先法,wang xian fa,founder,自行车,,学生,,
+金佳卉,jin jia hui,founder,电动车,,学生,,
+张欲晓,zhang yu xiao,In,未知,男,班主任，化学,,
+樊林生,fan lin sheng,founder,丰田/自行车,男,班主任，物理,,
+石步华,shi bu hua,founder,,女,语文,,
+田晨,tian chen,founder,,女,英语,,
+马艳华,ma yan hua,founder,,女,数学,,
+庞雷,pang lei,founder,,女,生物,,
+边富洋,bian fu yang,In,,男,历史,,
+赵淑华,zhao shu hua,In,,女,地理,,
+宋淑敬,song shu jing,In,,女,政治,,`;
 function parseCSV(text) {
   const lines = text.trim().split(/\r?\n/);
   const header = lines.shift().split(',').map(s => s.trim());
@@ -331,12 +340,12 @@ const FIELDS = [
   { key: 'gender',  label: '性别' },
   { key: 'sf',      label: '身份' },
   { key: 'rank',    label: '排名' },
-  { key: 'hobby',   label: '爱好' }
+  { key: 'hobby',   label: '备注' }
 ];
 const STATUS = {
   founder:     { text: '创班成员', cls: 'badge-gold'  },
-  transferIn:  { text: '后转入',   cls: 'badge-green' },
-  transferOut: { text: '已转出',   cls: 'badge-red'   }
+  In:  { text: '后来的',   cls: 'badge-green' },
+  Out: { text: '已切割',   cls: 'badge-red'   }
 };
 (function () {
   var inputEl = document.getElementById('search');
@@ -356,10 +365,10 @@ const STATUS = {
   function pinyinForms(st) {
     var p = String(st.pinyin || '').trim().toLowerCase();
     if (!p) return [];
-    var forms = [p.replace(/\s+/g, '')];   // 全拼：zhangxile
+    var forms = [p.replace(/\s+/g, '')];   // 全拼：
     var parts = p.split(/\s+/).filter(Boolean);
     if (parts.length > 1) {
-      forms.push(parts.map(function (x) { return x.charAt(0); }).join('')); // 首字母：zxl
+      forms.push(parts.map(function (x) { return x.charAt(0); }).join('')); // 首字母：
     }
     return forms;
   }
@@ -384,7 +393,7 @@ const STATUS = {
       })
       .join('');
     return '<article class="student-card' +
-             (statusKey === 'transferOut' ? ' is-out' : '') + '">' +
+             (statusKey === 'Out' ? ' is-out' : '') + '">' +
              '<div class="card-top">' +
                '<h2 class="card-name">' + esc(st[NAME_KEY]) + '</h2>' +
                '<span class="badge ' + meta.cls + '">' + esc(meta.text) + '</span>' +
