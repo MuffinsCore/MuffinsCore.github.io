@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<title>课程表</title>
+<style>
+:root{
+  --bg:#0b0d12;
+  --text:#e6e8ee;
+  --body:#cfd5e4;
+  --muted:#8b93a7;
+  --line:rgba(255,255,255,.09);
+  --accent:#7c9cff;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(900px 620px at 12% -10%, rgba(124,156,255,.16), transparent 65%),
+    radial-gradient(820px 600px at 100% 0%, rgba(192,132,252,.13), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+::selection{background:rgba(124,156,255,.35)}
+
+.wrap{max-width:1020px; margin:0 auto; padding:0 20px 60px;}
+
+/* ---------- 页头 ---------- */
+.page-head{padding:40px 0 24px}
+.page-head h1{
+  margin:0 0 8px;
+  font-size:clamp(1.8rem,5vw,2.4rem);
+  line-height:1.2;
+  letter-spacing:-.01em;
+  font-weight:750;
+  color:#e8ecff;
+  background:linear-gradient(100deg,#e8ecff 8%,#a9b8ff 52%,#d8a8ff 94%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.page-head .sub{margin:0; color:var(--muted); font-size:.9rem;}
+
+/* ---------- 图例 ---------- */
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 18px;
+}
+.legend-item{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  border:1px solid transparent;
+  line-height:1.6;
+}
+.legend-item .dot{
+  width:6px; height:6px; border-radius:50%;
+  margin-right:6px;
+  flex:0 0 auto;
+}
+
+/* ---------- 表格容器 ---------- */
+.table-wrap{
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01));
+  box-shadow:0 14px 44px -26px rgba(0,0,0,.95);
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+  /* 整体缩放核心：随视口连续变化 */
+  font-size:clamp(10px, 2.8vw, 14px);
+}
+
+/* ---------- 列宽 ---------- */
+th.period, td.period{ width:11%; }
+th.time,   td.time  { width:19%; }
+th.day,    td.day   { width:14%; }
+
+/* ---------- 表头 ---------- */
+thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  padding:0.9em 0.3em;
+  background:rgba(20,22,30,.94);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  color:var(--muted);
+  font-weight:650;
+  font-size:.85em;
+  letter-spacing:.05em;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+thead th.today{color:#a9b8ff;}
+
+/* ---------- 表体 ---------- */
+tbody td{
+  padding:0.75em 0.3em;
+  text-align:center;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  vertical-align:middle;
+}
+tbody tr:last-child td{border-bottom:none;}
+
+td.period{
+  color:var(--muted);
+  font-size:.9em;
+  font-weight:600;
+  letter-spacing:.03em;
+  white-space:nowrap;
+}
+
+td.time{
+  color:#6f7789;
+  font-size:.85em;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+td.today{background:rgba(124,156,255,.05);}
+
+/* ---------- 科目胶囊 ---------- */
+.subject{
+  display:inline-block;
+  padding:0.35em 0.6em;
+  border-radius:6px;
+  font-weight:600;
+  font-size:.92em;
+  letter-spacing:.02em;
+  line-height:1.4;
+  white-space:nowrap;
+}
+
+/* ---------- 午休行 ---------- */
+.break-row td{
+  background:rgba(255,255,255,.025);
+  color:#6f7789;
+  font-size:.9em;
+  letter-spacing:.16em;
+  font-style:italic;
+}
+
+/* ---------- 简称：默认隐藏 ---------- */
+.abbr{display:none;}
+
+/* ---------- 窄屏：切换简称 + 隐藏时间列 ---------- */
+@media (max-width: 680px){
+  .full{display:none;}
+  .abbr{display:inline;}
+
+  th.time, td.time{display:none;}
+
+  /* 6 列重分配：节次 15% + 5 天各 17% */
+  th.period, td.period{ width:15%; }
+  th.day,    td.day   { width:17%; }
+
+  thead th{font-size:.82em; letter-spacing:0;}
+}
+
+/* ---------- 全屏按钮（仅移动端显示） ---------- */
+.fs-btn{
+  display:none;
+  position:fixed;
+  right:max(20px, env(safe-area-inset-right));
+  bottom:max(20px, env(safe-area-inset-bottom));
+  z-index:50;
+  align-items:center;
+  gap:8px;
+  padding:12px 18px;
+  border:1px solid rgba(124,156,255,.35);
+  border-radius:999px;
+  background:rgba(20,24,34,.85);
+  backdrop-filter:blur(12px) saturate(1.2);
+  -webkit-backdrop-filter:blur(12px) saturate(1.2);
+  color:#e8ecff;
+  font:inherit;
+  font-size:.88rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  cursor:pointer;
+  box-shadow:0 8px 32px -8px rgba(0,0,0,.9), 0 0 0 1px rgba(124,156,255,.08);
+  transition:transform .18s, background .18s, border-color .18s;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.fs-btn:hover{background:rgba(30,36,52,.9); border-color:rgba(124,156,255,.55);}
+.fs-btn:active{transform:scale(.94);}
+.fs-btn .fs-icon{font-size:1em; line-height:1;}
+
+@media (max-width: 720px){
+  .fs-btn{display:inline-flex;}
+}
+
+/* ---------- 全屏状态（原生 / 伪全屏共用） ---------- */
+body.is-fullscreen{overflow:hidden;}
+
+body.is-fullscreen .page-head,
+body.is-fullscreen .page-foot,
+body.is-fullscreen .legend{display:none;}
+
+body.is-fullscreen .wrap{
+  max-width:none;
+  padding:0;
+  min-height:100vh;
+  min-height:100dvh;
+  display:block;
+  background:var(--bg);
+}
+
+body.is-fullscreen .table-wrap{
+  display:grid;
+  align-content:start;
+  justify-items:center;
+  padding:calc(56px + env(safe-area-inset-top)) 12px 24px;
+  min-height:100vh;
+  min-height:100dvh;
+  max-height:none;
+  border:none;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:auto;
+}
+
+body.is-fullscreen table{
+  width:100%;
+  max-width:900px;
+  font-size:clamp(13px, 3.4vw, 18px);
+}
+
+body.is-fullscreen thead th{
+  padding:1em 0.3em;
+}
+
+body.is-fullscreen .break-row td{
+  font-size:.85em;
+}
+
+/* 全屏时按钮浮到顶部，变为“退出” */
+body.is-fullscreen .fs-btn{
+  top:calc(12px + env(safe-area-inset-top));
+  bottom:auto;
+  background:rgba(0,0,0,.78);
+  border-color:rgba(255,255,255,.16);
+}
+
+/* ---------- 页脚 ---------- */
+.page-foot{
+  margin-top:32px;
+  padding-top:20px;
+  border-top:1px solid var(--line);
+  color:#6f7789;
+  font-size:.82rem;
+  line-height:1.8;
+}
+.page-foot code{
+  padding:2px 6px;
+  border-radius:6px;
+  background:rgba(255,255,255,.07);
+  color:#b8c0d4;
+  font-size:.9em;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:640px){
+  .wrap{padding:0 14px 48px;}
+  .page-head{padding:32px 0 20px;}
+}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <header class="page-head">
+    <h1>课程表</h1>
+    <p class="sub">2026年秋季学期 · 高一年级2班</p>
+  </header>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="table-wrap" id="tableWrap">
+    <table>
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer class="page-foot">
+    <p>课表数据以 CSV 格式内嵌在本页源码中，不上传任何服务器。修改请编辑 <code>SCHEDULE_CSV</code> 变量。</p>
+    <p>CSV 表头：<code>节次,时间,周一,周二,周三,周四,周五</code>；单元格留空表示无课，整行留空则渲染为休息行。</p>
+  </footer>
+
+</main>
+
+<!-- 移动端全屏按钮 -->
+<button class="fs-btn" id="fsBtn" type="button" aria-label="全屏查看">
+  <span class="fs-icon" id="fsIcon">⛶</span>
+  <span class="fs-label" id="fsLabel">全屏</span>
+</button>
+
+
+<script>
+/* =================================================================
+ * 1) 课表数据（内嵌 CSV）
+ * ================================================================= */
+const SCHEDULE_CSV = `节次,时间,周一,周二,周三,周四,周五,周六,周日
+第1节,07:40-08:20,语文,数学,英语,语文,数学,数学,数学
+第2节,08:30-09:10,数学,语文,数学,英语,语文,语文,语文
+第3节,09:20-10:00,英语,物理,语文,数学,英语,英语,英语
+第4节,10:10-10:50,物理,化学,生物,政治,历史,历史,历史
+第5节,11:00-11:40,体育,英语,历史,地理,物理,物理,物理
+午休,11:40-13:30,,,,,,,
+第6节,13:30-14:10,化学,地理,物理,化学,生物,生物,生物
+第7节,14:20-15:00,历史,政治,体育,生物,地理,地理,地理
+第8节,15:10-15:50,信息,音乐,美术,体育,班会,班会,班会
+第9节,123,信息,音乐,美术,体育,班会,班会,班会
+吃饭,123,,,,,,,
+第10节,123,信息,音乐,美术,体育,班会,班会,班会
+第11节,123,信息,音乐,美术,体育,班会,班会,班会
+第12节,123,信息,音乐,美术,体育,班会,班会,班会
+`;
+
+/* =================================================================
+ * 2) 科目配色
+ * ================================================================= */
+const SUBJECT_COLORS = {
+  '语文': { bg: 'rgba(248,113,113,.15)', fg: '#fca5a5', dot: '#f87171' },
+  '数学': { bg: 'rgba(96,165,250,.15)',  fg: '#93c5fd', dot: '#60a5fa' },
+  '英语': { bg: 'rgba(167,139,250,.15)', fg: '#c4b5fd', dot: '#a78bfa' },
+  '物理': { bg: 'rgba(251,191,36,.14)',  fg: '#fcd34d', dot: '#fbbf24' },
+  '化学': { bg: 'rgba(52,211,153,.14)',  fg: '#6ee7b7', dot: '#34d399' },
+  '生物': { bg: 'rgba(45,212,191,.14)',  fg: '#5eead4', dot: '#2dd4bf' },
+  '政治': { bg: 'rgba(244,114,182,.14)', fg: '#f9a8d4', dot: '#f472b6' },
+  '历史': { bg: 'rgba(251,146,60,.14)',  fg: '#fdba74', dot: '#fb923c' },
+  '地理': { bg: 'rgba(34,211,238,.14)',  fg: '#67e8f9', dot: '#22d3ee' },
+  '体育': { bg: 'rgba(74,222,128,.14)',  fg: '#86efac', dot: '#4ade80' },
+  '音乐': { bg: 'rgba(192,132,252,.14)', fg: '#d8b4fe', dot: '#c084fc' },
+  '美术': { bg: 'rgba(240,171,252,.14)', fg: '#f5d0fe', dot: '#f0abfc' },
+  '信息': { bg: 'rgba(56,189,248,.14)',  fg: '#7dd3fc', dot: '#38bdf8' },
+  '通用': { bg: 'rgba(148,163,184,.14)', fg: '#cbd5e1', dot: '#94a3b8' },
+  '班会': { bg: 'rgba(250,204,21,.14)',  fg: '#fde047', dot: '#facc15' },
+  '自习': { bg: 'rgba(148,163,184,.12)', fg: '#cbd5e1', dot: '#94a3b8' }
+};
+const DEFAULT_COLOR = { bg: 'rgba(255,255,255,.08)', fg: '#cfd5e4', dot: '#8b93a7' };
+
+/* =================================================================
+ * 3) CSV 解析
+ * ================================================================= */
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  const header = lines.shift().split(',').map(s => s.trim());
+  const dayColumns = header.slice(2);
+
+  const rows = lines.filter(l => l.trim()).map(line => {
+    const cells = line.split(',').map(s => s.trim());
+    while (cells.length < header.length) cells.push('');
+    return { period: cells[0], time: cells[1], days: cells.slice(2) };
+  });
+
+  return { header, dayColumns, rows };
+}
+
+/* =================================================================
+ * 4) 工具函数
+ * ================================================================= */
+function esc(v) {
+  return String(v).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+function getTodayIndex() {
+  const d = new Date().getDay();
+  return (d >= 1 && d <= 5) ? d - 1 : -1;
+}
+function colorOf(subject) { return SUBJECT_COLORS[subject] || DEFAULT_COLOR; }
+
+/* 生成全称 / 简称两个 span */
+function dualSpan(fullText, abbrText) {
+  const wrap = document.createElement('span');
+  const full = document.createElement('span');
+  full.className = 'full';
+  full.textContent = fullText;
+  const abbr = document.createElement('span');
+  abbr.className = 'abbr';
+  abbr.textContent = abbrText;
+  wrap.appendChild(full);
+  wrap.appendChild(abbr);
+  return wrap;
+}
+
+/* =================================================================
+ * 5) 渲染表格
+ * ================================================================= */
+const { header, dayColumns, rows } = parseCSV(SCHEDULE_CSV);
+const todayIdx = getTodayIndex();
+
+const theadEl = document.getElementById('thead');
+const tbodyEl = document.getElementById('tbody');
+const legendEl = document.getElementById('legend');
+
+/* ---- 表头 ---- */
+const headTr = document.createElement('tr');
+
+// 节次
+const thPeriod = document.createElement('th');
+thPeriod.className = 'period';
+thPeriod.textContent = '节次';
+headTr.appendChild(thPeriod);
+
+// 时间
+const thTime = document.createElement('th');
+thTime.className = 'time';
+thTime.textContent = '时间';
+headTr.appendChild(thTime);
+
+// 周一到周五
+dayColumns.forEach((day, i) => {
+  const th = document.createElement('th');
+  th.className = 'day';
+  if (i === todayIdx) th.classList.add('today');
+  th.appendChild(dualSpan(day, day.slice(-1))); // 周一 → 一
+  headTr.appendChild(th);
+});
+theadEl.appendChild(headTr);
+
+/* ---- 表体 ---- */
+rows.forEach(row => {
+  const tr = document.createElement('tr');
+  const isEmptyRow = row.days.every(d => !d);
+
+  // 节次：第1节 → 1
+  const tdPeriod = document.createElement('td');
+  tdPeriod.className = 'period';
+  const m = row.period.match(/\d+/);
+  tdPeriod.appendChild(dualSpan(row.period, m ? m[0] : row.period.charAt(0)));
+  tr.appendChild(tdPeriod);
+
+  // 时间
+  const tdTime = document.createElement('td');
+  tdTime.className = 'time';
+  tdTime.textContent = row.time;
+  tr.appendChild(tdTime);
+
+  if (isEmptyRow) {
+    // 休息行：跨列合并（时间列也保留，桌面端对齐；窄屏时间列隐藏不影响）
+    tr.classList.add('break-row');
+    const td = document.createElement('td');
+    td.colSpan = dayColumns.length;
+    td.textContent = row.period === '午休' ? '☕ 午 间 休 息' : row.period;
+    tr.appendChild(td);
+  } else {
+    row.days.forEach((subject, i) => {
+      const td = document.createElement('td');
+      td.className = 'day';
+      if (i === todayIdx) td.classList.add('today');
+
+      if (subject) {
+        const c = colorOf(subject);
+        const span = document.createElement('span');
+        span.className = 'subject';
+        span.style.background = c.bg;
+        span.style.color = c.fg;
+        // 语文 → 语
+        span.appendChild(dualSpan(subject, subject.charAt(0)));
+        td.appendChild(span);
+      }
+
+      tr.appendChild(td);
+    });
+  }
+
+  tbodyEl.appendChild(tr);
+});
+
+/* ---- 图例 ---- */
+const subjectSet = new Set();
+rows.forEach(r => r.days.forEach(d => { if (d) subjectSet.add(d); }));
+
+[...subjectSet].sort().forEach(subject => {
+  const c = colorOf(subject);
+  const item = document.createElement('span');
+  item.className = 'legend-item';
+  item.style.background = c.bg;
+  item.style.color = c.fg;
+
+  const dot = document.createElement('span');
+  dot.className = 'dot';
+  dot.style.background = c.dot;
+
+  item.appendChild(dot);
+  item.appendChild(document.createTextNode(subject));
+  legendEl.appendChild(item);
+});
+
+/* =================================================================
+ * 6) 全屏功能（原生 Fullscreen API + CSS 伪全屏降级）
+ * ================================================================= */
+const fsBtn   = document.getElementById('fsBtn');
+const fsIcon  = document.getElementById('fsIcon');
+const fsLabel = document.getElementById('fsLabel');
+
+function isNativeFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+function isFullscreen() {
+  return isNativeFullscreen() || document.body.classList.contains('is-fullscreen');
+}
+function updateBtn() {
+  const on = isFullscreen();
+  fsIcon.textContent  = on ? '✕' : '⛶';
+  fsLabel.textContent = on ? '退出' : '全屏';
+  fsBtn.setAttribute('aria-label', on ? '退出全屏' : '全屏查看');
+}
+
+async function enterFullscreen() {
+  const el = document.documentElement;
+  try {
+    if (el.requestFullscreen) {
+      await el.requestFullscreen();
+      return;
+    }
+    if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+      return;
+    }
+    throw new Error('Fullscreen API not supported');
+  } catch (e) {
+    // 降级为 CSS 伪全屏（iOS Safari 等）
+    document.body.classList.add('is-pseudo-fullscreen');
+  } finally {
+    document.body.classList.add('is-fullscreen');
+    updateBtn();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen().catch(() => {});
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+  document.body.classList.remove('is-fullscreen');
+  document.body.classList.remove('is-pseudo-fullscreen');
+  updateBtn();
+}
+
+function toggleFullscreen() {
+  if (isFullscreen()) exitFullscreen();
+  else enterFullscreen();
+}
+
+fsBtn.addEventListener('click', toggleFullscreen);
+
+/* 原生全屏退出时同步清理状态 */
+function onFullscreenChange() {
+  if (!isNativeFullscreen() && !document.body.classList.contains('is-pseudo-fullscreen')) {
+    document.body.classList.remove('is-fullscreen');
+    updateBtn();
+  }
+}
+document.addEventListener('fullscreenchange', onFullscreenChange);
+document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+/* Esc 退出伪全屏 */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.body.classList.contains('is-pseudo-fullscreen')) {
+    exitFullscreen();
+  }
+});
+</script>
+</body>
+</html>
