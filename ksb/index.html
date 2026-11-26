@@ -144,6 +144,37 @@ td.time{
 
 td.today{background:rgba(124,156,255,.05);}
 
+
+
+
+.btn{
+  --btn-bg:var(--surface-2);
+  --btn-border:var(--border);
+  --btn-fg:#e6e8ee;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:9px 16px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--btn-border);
+  background:var(--btn-bg);
+  color:var(--btn-fg);
+  font:inherit;
+  font-size:.92rem;
+  font-weight:600;
+  line-height:1.4;
+  text-decoration:none;
+  white-space:nowrap;
+  cursor:pointer;
+  user-select:none;
+  transition:background .2s,border-color .2s,color .2s,box-shadow .2s,transform .12s;
+}
+.btn-primary{
+  --btn-bg:rgba(124,156,255,.16);
+  --btn-border:rgba(124,156,255,.42);
+  --btn-fg:#dfe6ff;
+}
 /* ---------- 科目胶囊 ---------- */
 .subject{
   display:inline-block;
@@ -156,7 +187,7 @@ td.today{background:rgba(124,156,255,.05);}
   white-space:nowrap;
 }
 
-/* ---------- 午休行 ---------- */
+/* ---------- 休息行 ---------- */
 .break-row td{
   background:rgba(255,255,255,.025);
   color:#6f7789;
@@ -217,10 +248,6 @@ td.today{background:rgba(124,156,255,.05);}
 
 /* =================================================================
  * 全屏状态（原生 / 伪全屏共用）
- * 关键修复：
- *   .wrap 固定为视口高度 + flex 列布局
- *   .table-wrap 用 flex:1 撑满剩余高度、min-height:0 允许收缩
- *   作为唯一滚动容器，内容超出时在容器内上下滚动
  * ================================================================= */
 body.is-fullscreen{overflow:hidden;}
 
@@ -242,10 +269,10 @@ body.is-fullscreen .wrap{
 
 body.is-fullscreen .table-wrap{
   flex:1 1 auto;
-  min-height:0;               /* 关键：允许 flex 子项收缩，overflow 才能生效 */
-  overflow:auto;              /* 纵横都可滚动 */
+  min-height:0;
+  overflow:auto;
   -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;/* 滚到底不会带动页面 */
+  overscroll-behavior:contain;
   border:none;
   border-radius:0;
   background:transparent;
@@ -253,7 +280,6 @@ body.is-fullscreen .table-wrap{
 }
 
 body.is-fullscreen table{
-  /* 上下留出按钮/安全区空间，左右留一点呼吸 */
   width:calc(100% - 24px);
   max-width:900px;
   margin:calc(56px + env(safe-area-inset-top)) auto calc(24px + env(safe-area-inset-bottom));
@@ -262,7 +288,6 @@ body.is-fullscreen table{
 
 body.is-fullscreen thead th{
   padding:1em 0.3em;
-  /* sticky 表头加一点分隔阴影，滚动时与内容区分开 */
   box-shadow:0 1px 0 var(--line), 0 6px 12px -6px rgba(0,0,0,.5);
 }
 
@@ -270,7 +295,6 @@ body.is-fullscreen .break-row td{
   font-size:.85em;
 }
 
-/* 全屏时按钮浮到顶部，变为“退出” */
 body.is-fullscreen .fs-btn{
   top:calc(12px + env(safe-area-inset-top));
   bottom:auto;
@@ -337,9 +361,9 @@ body.is-fullscreen .fs-btn{
       <tbody id="tbody"></tbody>
     </table>
   </div>
-
+<a class="btn btn-primary" href="../">返回</a>
   <footer class="page-foot">
-    <p>最后修改时间：<code>2026年11月26日11:37</code> v0.2</p>
+    <p>最后修改时间：<code>2026年11月26日15:13</code> v1.1.2</p>
   </footer>
 
 </main>
@@ -353,23 +377,30 @@ body.is-fullscreen .fs-btn{
 
 <script>
 /* =================================================================
- * 1) 课表数据（内嵌 CSV）
+ * 1) 课表数据（内嵌 CSV，来自 1.csv）
  * ================================================================= */
-const SCHEDULE_CSV = `节次,时间,周一,周二,周三,周四,周五,周六,周日
-第1节,07:40-08:20,语文,数学,英语,语文,数学,数学,数学
-第2节,08:30-09:10,数学,语文,数学,英语,语文,语文,语文
-第3节,09:20-10:00,英语,物理,语文,数学,英语,英语,英语
-第4节,10:10-10:50,物理,化学,生物,政治,历史,历史,历史
-第5节,11:00-11:40,体育,英语,历史,地理,物理,物理,物理
-午休,11:40-13:30,,,,,,,
-第6节,13:30-14:10,化学,地理,物理,化学,生物,生物,生物
-第7节,14:20-15:00,历史,政治,体育,生物,地理,地理,地理
-第8节,15:10-15:50,信息,音乐,美术,体育,班会,班会,班会
-第9节,123,信息,音乐,美术,体育,班会,班会,班会
-吃饭,123,,,,,,,
-第10节,123,信息,音乐,美术,体育,班会,班会,班会
-第11节,123,信息,音乐,美术,体育,班会,班会,班会
-第12节,123,信息,音乐,美术,体育,班会,班会,班会`;
+const SCHEDULE_CSV = `节次,时间,周一,周二,周三,周四,周五
+早读1,6:50-7:00,生物,化学,生物,化学,生物
+早读2,7:00-7:40,英语,语文,英语,语文,英语
+唱歌,7:50-8:00,,,,,
+第1节,8:00-8:40,语文,语文,英语,数学,数学
+第2节,8:50-9:30,化学,地理,物理,语文,语文
+跑操,9:30-9:45,,,,,
+第3节,9:45-10:25,化学,生物,物理,英语,数学
+第4节,10:35-11:15,体育,物理,语文,数学,化学
+第5节,11:25-12:05,英语,生物,体育,物理,语文
+午休,12:05-14:00,,,,,
+唱歌,14:00-14:10,,,,,
+第6节,14:10-14:50,物理,历史,数学,英语,英语
+第7节,15:00-15:40,数学,英语,生物,化学,生物
+跑操,15:40-16:25,,,,,
+第8节,16:25-17:05,生物,数学,化学,政治,物理
+第9节,17:15-17:55,班会,英语,音乐/美术,信息/通用,体育
+吃饭,17:55-18:25,,,,,
+自习或听力,18:25-18:55,,,,,
+第10节,18:55-19:40,生物,地理,物理,政治,物理
+第11节,19:50-20:35,物理,化学,数学,数学,化学
+第12节,20:45-21:30,数学,历史,语文,英语,数学`;
 
 /* =================================================================
  * 2) 科目配色
@@ -423,7 +454,38 @@ function getTodayIndex() {
   const d = new Date().getDay();
   return (d >= 1 && d <= 5) ? d - 1 : -1;
 }
-function colorOf(subject) { return SUBJECT_COLORS[subject] || DEFAULT_COLOR; }
+
+/* 支持“音乐/美术”“信息/通用”这类组合科目：先整体匹配，再按 / 或 、 拆分 */
+function colorOf(subject) {
+  if (SUBJECT_COLORS[subject]) return SUBJECT_COLORS[subject];
+  const parts = subject.split(/[\/、]/);
+  for (const p of parts) {
+    const key = p.trim();
+    if (SUBJECT_COLORS[key]) return SUBJECT_COLORS[key];
+  }
+  return DEFAULT_COLOR;
+}
+
+/* 节次简称：第1节→1，早读1→早1，唱歌→唱，跑操→跑，自习或听力→自 */
+function periodAbbr(period) {
+  const m = period.match(/^(早读|第)(\d+)/);
+  if (m) {
+    return m[1] === '早读' ? '早' + m[2] : m[2];
+  }
+  return period.charAt(0);
+}
+
+/* 休息行友好标签 */
+function breakLabel(period) {
+  const map = {
+    '午休': '☕ 午 间 休 息',
+    '唱歌': '🎤 唱 歌',
+    '跑操': '🏃 跑 操',
+    '吃饭': '🍚 吃 饭',
+    '自习或听力': '📖 自 习 或 听 力'
+  };
+  return map[period] || period;
+}
 
 function dualSpan(fullText, abbrText) {
   const wrap = document.createElement('span');
@@ -477,8 +539,7 @@ rows.forEach(row => {
 
   const tdPeriod = document.createElement('td');
   tdPeriod.className = 'period';
-  const m = row.period.match(/\d+/);
-  tdPeriod.appendChild(dualSpan(row.period, m ? m[0] : row.period.charAt(0)));
+  tdPeriod.appendChild(dualSpan(row.period, periodAbbr(row.period)));
   tr.appendChild(tdPeriod);
 
   const tdTime = document.createElement('td');
@@ -490,7 +551,7 @@ rows.forEach(row => {
     tr.classList.add('break-row');
     const td = document.createElement('td');
     td.colSpan = dayColumns.length;
-    td.textContent = row.period === '午休' ? '☕ 午 间 休 息' : row.period;
+    td.textContent = breakLabel(row.period);
     tr.appendChild(td);
   } else {
     row.days.forEach((subject, i) => {
@@ -568,7 +629,6 @@ async function enterFullscreen() {
     }
     throw new Error('Fullscreen API not supported');
   } catch (e) {
-    // 降级为 CSS 伪全屏（iOS Safari 等）
     document.body.classList.add('is-pseudo-fullscreen');
   } finally {
     document.body.classList.add('is-fullscreen');

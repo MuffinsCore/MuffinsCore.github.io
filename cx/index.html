@@ -250,7 +250,7 @@ body{
   <div class="cards" id="cards"></div>
   <p class="empty" id="empty"></p>
   <footer class="page-foot">
-    <p>v0.2.2 最后编辑于2026年11月22日23:30</p>
+    <p>v0.2.3 最后编辑于2026年11月26日15:13</p>
     <p>查询需完全匹配姓名；也可用拼音全拼或首字母精确查询。</p>
   </footer>
 </main>
@@ -315,7 +315,8 @@ const STUDENTS_CSV = `name,pinyin,status,commute,gender,sf,rank,hobby
 庞雷,pang lei,founder,,女,生物,,
 边富洋,bian fu yang,In,,男,历史,,
 赵淑华,zhao shu hua,In,,女,地理,,
-宋淑敬,song shu jing,In,,女,政治,,`;
+宋淑敬,song shu jing,In,,女,政治,,
+闫如月,yan ru yue,Out,,女,化学,,`;
 function parseCSV(text) {
   const lines = text.trim().split(/\r?\n/);
   const header = lines.shift().split(',').map(s => s.trim());
