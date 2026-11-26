@@ -91,7 +91,6 @@ table{
   border-collapse:separate;
   border-spacing:0;
   table-layout:fixed;
-  /* 整体缩放核心：随视口连续变化 */
   font-size:clamp(10px, 2.8vw, 14px);
 }
 
@@ -176,7 +175,6 @@ td.today{background:rgba(124,156,255,.05);}
 
   th.time, td.time{display:none;}
 
-  /* 6 列重分配：节次 15% + 5 天各 17% */
   th.period, td.period{ width:15%; }
   th.day,    td.day   { width:17%; }
 
@@ -217,7 +215,13 @@ td.today{background:rgba(124,156,255,.05);}
   .fs-btn{display:inline-flex;}
 }
 
-/* ---------- 全屏状态（原生 / 伪全屏共用） ---------- */
+/* =================================================================
+ * 全屏状态（原生 / 伪全屏共用）
+ * 关键修复：
+ *   .wrap 固定为视口高度 + flex 列布局
+ *   .table-wrap 用 flex:1 撑满剩余高度、min-height:0 允许收缩
+ *   作为唯一滚动容器，内容超出时在容器内上下滚动
+ * ================================================================= */
 body.is-fullscreen{overflow:hidden;}
 
 body.is-fullscreen .page-head,
@@ -226,36 +230,40 @@ body.is-fullscreen .legend{display:none;}
 
 body.is-fullscreen .wrap{
   max-width:none;
+  width:100%;
+  height:100vh;
+  height:100dvh;
   padding:0;
-  min-height:100vh;
-  min-height:100dvh;
-  display:block;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
   background:var(--bg);
 }
 
 body.is-fullscreen .table-wrap{
-  display:grid;
-  align-content:start;
-  justify-items:center;
-  padding:calc(56px + env(safe-area-inset-top)) 12px 24px;
-  min-height:100vh;
-  min-height:100dvh;
-  max-height:none;
+  flex:1 1 auto;
+  min-height:0;               /* 关键：允许 flex 子项收缩，overflow 才能生效 */
+  overflow:auto;              /* 纵横都可滚动 */
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;/* 滚到底不会带动页面 */
   border:none;
   border-radius:0;
   background:transparent;
   box-shadow:none;
-  overflow:auto;
 }
 
 body.is-fullscreen table{
-  width:100%;
+  /* 上下留出按钮/安全区空间，左右留一点呼吸 */
+  width:calc(100% - 24px);
   max-width:900px;
+  margin:calc(56px + env(safe-area-inset-top)) auto calc(24px + env(safe-area-inset-bottom));
   font-size:clamp(13px, 3.4vw, 18px);
 }
 
 body.is-fullscreen thead th{
   padding:1em 0.3em;
+  /* sticky 表头加一点分隔阴影，滚动时与内容区分开 */
+  box-shadow:0 1px 0 var(--line), 0 6px 12px -6px rgba(0,0,0,.5);
 }
 
 body.is-fullscreen .break-row td{
@@ -268,6 +276,24 @@ body.is-fullscreen .fs-btn{
   bottom:auto;
   background:rgba(0,0,0,.78);
   border-color:rgba(255,255,255,.16);
+}
+
+/* ---------- 横屏小高度紧凑化 ---------- */
+@media (orientation: landscape) and (max-height: 560px){
+  body.is-fullscreen table{
+    font-size:clamp(11px, 2.4vw, 15px);
+    margin:calc(44px + env(safe-area-inset-top)) auto calc(12px + env(safe-area-inset-bottom));
+  }
+  body.is-fullscreen thead th{
+    padding:0.6em 0.25em;
+  }
+  body.is-fullscreen tbody td{
+    padding:0.5em 0.25em;
+  }
+  body.is-fullscreen .break-row td{
+    font-size:.8em;
+    padding:0.4em 0.25em;
+  }
 }
 
 /* ---------- 页脚 ---------- */
@@ -313,7 +339,7 @@ body.is-fullscreen .fs-btn{
   </div>
 
   <footer class="page-foot">
-    <p>最后修改时间：<code>2026年11月23日22:30</code> v0.1</p>
+    <p>最后修改时间：<code>2026年11月26日11:37</code> v0.2</p>
   </footer>
 
 </main>
@@ -343,8 +369,7 @@ const SCHEDULE_CSV = `节次,时间,周一,周二,周三,周四,周五,周六,�
 吃饭,123,,,,,,,
 第10节,123,信息,音乐,美术,体育,班会,班会,班会
 第11节,123,信息,音乐,美术,体育,班会,班会,班会
-第12节,123,信息,音乐,美术,体育,班会,班会,班会
-`;
+第12节,123,信息,音乐,美术,体育,班会,班会,班会`;
 
 /* =================================================================
  * 2) 科目配色
@@ -400,7 +425,6 @@ function getTodayIndex() {
 }
 function colorOf(subject) { return SUBJECT_COLORS[subject] || DEFAULT_COLOR; }
 
-/* 生成全称 / 简称两个 span */
 function dualSpan(fullText, abbrText) {
   const wrap = document.createElement('span');
   const full = document.createElement('span');
@@ -427,24 +451,21 @@ const legendEl = document.getElementById('legend');
 /* ---- 表头 ---- */
 const headTr = document.createElement('tr');
 
-// 节次
 const thPeriod = document.createElement('th');
 thPeriod.className = 'period';
 thPeriod.textContent = '节次';
 headTr.appendChild(thPeriod);
 
-// 时间
 const thTime = document.createElement('th');
 thTime.className = 'time';
 thTime.textContent = '时间';
 headTr.appendChild(thTime);
 
-// 周一到周五
 dayColumns.forEach((day, i) => {
   const th = document.createElement('th');
   th.className = 'day';
   if (i === todayIdx) th.classList.add('today');
-  th.appendChild(dualSpan(day, day.slice(-1))); // 周一 → 一
+  th.appendChild(dualSpan(day, day.slice(-1)));
   headTr.appendChild(th);
 });
 theadEl.appendChild(headTr);
@@ -454,21 +475,18 @@ rows.forEach(row => {
   const tr = document.createElement('tr');
   const isEmptyRow = row.days.every(d => !d);
 
-  // 节次：第1节 → 1
   const tdPeriod = document.createElement('td');
   tdPeriod.className = 'period';
   const m = row.period.match(/\d+/);
   tdPeriod.appendChild(dualSpan(row.period, m ? m[0] : row.period.charAt(0)));
   tr.appendChild(tdPeriod);
 
-  // 时间
   const tdTime = document.createElement('td');
   tdTime.className = 'time';
   tdTime.textContent = row.time;
   tr.appendChild(tdTime);
 
   if (isEmptyRow) {
-    // 休息行：跨列合并（时间列也保留，桌面端对齐；窄屏时间列隐藏不影响）
     tr.classList.add('break-row');
     const td = document.createElement('td');
     td.colSpan = dayColumns.length;
@@ -486,7 +504,6 @@ rows.forEach(row => {
         span.className = 'subject';
         span.style.background = c.bg;
         span.style.color = c.fg;
-        // 语文 → 语
         span.appendChild(dualSpan(subject, subject.charAt(0)));
         td.appendChild(span);
       }
@@ -577,7 +594,6 @@ function toggleFullscreen() {
 
 fsBtn.addEventListener('click', toggleFullscreen);
 
-/* 原生全屏退出时同步清理状态 */
 function onFullscreenChange() {
   if (!isNativeFullscreen() && !document.body.classList.contains('is-pseudo-fullscreen')) {
     document.body.classList.remove('is-fullscreen');
@@ -587,7 +603,6 @@ function onFullscreenChange() {
 document.addEventListener('fullscreenchange', onFullscreenChange);
 document.addEventListener('webkitfullscreenchange', onFullscreenChange);
 
-/* Esc 退出伪全屏 */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && document.body.classList.contains('is-pseudo-fullscreen')) {
     exitFullscreen();
